@@ -1,8 +1,9 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Category;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +11,13 @@ import java.util.List;
 @Repository
 public class CategoryRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from category;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -43,7 +40,7 @@ public class CategoryRepository {
     public Category getCategory(int id) {
         Category category = new Category();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from category where idCategory = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -64,7 +61,7 @@ public class CategoryRepository {
 
     public void addCategory(Category category) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into category (name, categoryPayment, studyTime) values (?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, category.getName());
@@ -80,7 +77,7 @@ public class CategoryRepository {
 
     public void updateCategory(Category category) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update category set name = ?, categoryPayment = ?, studyTime = ? where idCategory = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, category.getName());
@@ -97,7 +94,7 @@ public class CategoryRepository {
 
     public void deleteCategory(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from category where idCategory = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);

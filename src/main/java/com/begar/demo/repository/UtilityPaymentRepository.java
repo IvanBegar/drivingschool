@@ -1,8 +1,9 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.UtilityPayment;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +11,13 @@ import java.util.List;
 @Repository
 public class UtilityPaymentRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public List<UtilityPayment> getUtilityPayments() {
         List<UtilityPayment> utilityPayments = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from utilitypayments;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -42,7 +39,7 @@ public class UtilityPaymentRepository {
     public UtilityPayment getUtilityPayment(int id) {
         UtilityPayment utilityPayment = new UtilityPayment();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from utilitypayments where idUtilityPayments = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -62,7 +59,7 @@ public class UtilityPaymentRepository {
 
     public void addUtilityPayment(UtilityPayment utilityPayment) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into utilitypayments (size, date) values (?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setDouble(1, utilityPayment.getSize());
@@ -77,7 +74,7 @@ public class UtilityPaymentRepository {
 
     public void updateUtilityPayment(UtilityPayment utilityPayment) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update utilitypayments set size = ?, date = ? where idUtilityPayments = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setDouble(1, utilityPayment.getSize());
@@ -93,7 +90,7 @@ public class UtilityPaymentRepository {
 
     public void deleteUtilityPayment(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from utilitypayments where idUtilityPayments = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);

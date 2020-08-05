@@ -1,8 +1,9 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Payment;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +11,13 @@ import java.util.List;
 @Repository
 public class PaymentRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public List<Payment> getPayments() {
         List<Payment> payments = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from payment;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -44,7 +41,7 @@ public class PaymentRepository {
     public Payment getPayment(int id) {
         Payment payment = new Payment();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from payment where idPayment = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -66,7 +63,7 @@ public class PaymentRepository {
 
     public void addPayment(Payment payment) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into payment (idStudent, dateOfPayment, paymentSize, paymentComment) values (?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, payment.getIdStudent());
@@ -83,7 +80,7 @@ public class PaymentRepository {
 
     public void updatePayment(Payment payment) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update payment set idStudent = ?, dateOfPayment = ?, paymentSize = ?, paymentComment = ? where idPayment = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, payment.getIdStudent());
@@ -101,7 +98,7 @@ public class PaymentRepository {
 
     public void deletePayment(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from payment where idPayment = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);

@@ -1,8 +1,9 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Group;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +11,13 @@ import java.util.List;
 @Repository
 public class GroupRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
-
+    @Autowired
+    private DataSource dataSource;
 
     public List<Group> getGroups() {
         List<Group> groups = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from mydb.groups;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -46,7 +42,7 @@ public class GroupRepository {
     public Group getGroup(int id) {
         Group group = new Group();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from mydb.groups where idGroup = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -69,7 +65,7 @@ public class GroupRepository {
 
     public void addGroup(Group group) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into mydb.groups (idCategory, idSchedule, groupNumber, startDate, endDate) values (?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, group.getIdCategory());
@@ -87,7 +83,7 @@ public class GroupRepository {
 
     public void updateGroup(Group group) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update mydb.groups set idCategory = ?, idSchedule = ?, groupNumber = ?, startDate = ?, endDate = ? where idGroup = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, group.getIdCategory());
@@ -106,7 +102,7 @@ public class GroupRepository {
 
     public void deleteGroup(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from mydb.groups where idGroup = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);

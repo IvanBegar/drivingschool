@@ -1,8 +1,9 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Teacher;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +11,13 @@ import java.util.List;
 @Repository
 public class TeacherRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
-
+    @Autowired
+    private DataSource dataSource;
 
     public List<Teacher> getTeachers() {
         List<Teacher> teachers = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from teacher;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -48,7 +44,7 @@ public class TeacherRepository {
     public Teacher getTeacher(int id) {
         Teacher t1 = new Teacher();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from teacher where idTeacher = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -73,7 +69,7 @@ public class TeacherRepository {
 
     public void addTeacher(Teacher t1) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into teacher (firstName, middleName, lastName, dateOfBirth, adress, phone, salary) values (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, t1.getFirstName());
@@ -93,7 +89,7 @@ public class TeacherRepository {
 
     public void updateTeacher(Teacher t1) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update teacher set firstName = ?, middleName = ?, lastName = ?, dateOfBirth = ?, adress = ?, phone = ?, salary = ? where idTeacher = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, t1.getFirstName());
@@ -114,7 +110,7 @@ public class TeacherRepository {
 
     public void deleteTeacher(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from teacher where idTeacher = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);

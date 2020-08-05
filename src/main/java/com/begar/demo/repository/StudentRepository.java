@@ -3,8 +3,9 @@ package com.begar.demo.repository;
 import com.begar.demo.dto.StudentDocumentsDTO;
 import com.begar.demo.dto.StudentPerCategoryDTO;
 import com.begar.demo.entity.Student;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +13,13 @@ import java.util.List;
 @Repository
 public class StudentRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public List<Student> getStudents() {
         List<Student> students = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from student;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -49,7 +46,7 @@ public class StudentRepository {
     public Student getStudent(int id) {
         Student s1 = new Student();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from mydb.student where idStudent = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -74,7 +71,7 @@ public class StudentRepository {
 
     public void addStudent(Student s1) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into student (idGroup, firstName, middleName, lastName, dateOfBirth, adress, phone) values (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, s1.getIdGroup());
@@ -94,7 +91,7 @@ public class StudentRepository {
 
     public void updateStudent(Student s1) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update student set idGroup = ?, firstName = ?, middleName = ?, lastName = ?, dateOfBirth = ?, adress = ?, phone = ? where idStudent = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, s1.getIdGroup());
@@ -115,7 +112,7 @@ public class StudentRepository {
 
     public void deleteStudent(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from student where idStudent = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -130,7 +127,7 @@ public class StudentRepository {
     public StudentPerCategoryDTO getStudentsPerCategory(String cat) {
         StudentPerCategoryDTO sdto1 = new StudentPerCategoryDTO();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select category.name, idStudent, student.idGroup, lastName, firstName, middleName, dateOfBirth, phone, adress from student \n" +
                     "inner join mydb.groups on student.idGroup=mydb.groups.idGroup \n" +
                     "inner join category on mydb.groups.idCategory=category.idCategory\n" +
@@ -160,7 +157,7 @@ public class StudentRepository {
     public StudentDocumentsDTO getStudentDocuments(int id) {
         StudentDocumentsDTO studentDocumentsDTO = new StudentDocumentsDTO();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "SELECT student.firstName,student.lastName, photo, mainDocumentsCopies, medicalСertificate from documents\n" +
                     "inner join student on documents.idStudent=student.idStudent\n" +
                     "where documents.idStudent = ?;";
@@ -185,7 +182,7 @@ public class StudentRepository {
     public List<Student> getStudentsPerGroup(int id) {
         List<Student> students = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from student \n" +
                     "inner join mydb.groups on student.idGroup=mydb.groups.idGroup \n" +
                     "where mydb.groups.idGroup = ?;";

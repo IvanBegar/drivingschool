@@ -3,24 +3,21 @@ package com.begar.demo.repository;
 import com.begar.demo.dto.IncomeForPeriodDTO;
 import com.begar.demo.dto.IncomePerCategoryDTO;
 import com.begar.demo.dto.PaymentForPeriodDTO;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 
 @Repository
 public class IncomeRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public IncomeForPeriodDTO getIncomeForPeriod(String str, String end) {
         IncomeForPeriodDTO incomeForPeriodDTO = new IncomeForPeriodDTO();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select sum(paymentSize) from payment where dateOfPayment between ? and ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, str);
@@ -40,7 +37,7 @@ public class IncomeRepository {
     public IncomePerCategoryDTO getIncomePerCategory(String cat) {
         IncomePerCategoryDTO incomePerCategoryDTO = new IncomePerCategoryDTO();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "SELECT category.name, SUM(paymentSize) FROM payment \n" +
                     "inner join student on payment.idStudent = student.idStudent\n" +
                     "inner join mydb.groups on student.idGroup=groups.idGroup\n" +
@@ -64,7 +61,7 @@ public class IncomeRepository {
     public PaymentForPeriodDTO getPaymentForPeriod(String str, String end) {
         PaymentForPeriodDTO paymentForPeriodDTO = new PaymentForPeriodDTO();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select size from utilitypayments where date between ? and ?\n" +
                     "union \n" +
                     "select size from vehiclepayments where date between ? and ?\n" +

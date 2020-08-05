@@ -1,9 +1,9 @@
 package com.begar.demo.repository;
 
-import com.begar.demo.entity.Schedule;
 import com.begar.demo.entity.StudentResult;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +11,13 @@ import java.util.List;
 @Repository
 public class StudentResultRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+    @Autowired
+    private DataSource dataSource;
 
     public List<StudentResult> getStudentResults() {
         List<StudentResult> studentResults = new ArrayList<>();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from studentresults;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -45,7 +41,7 @@ public class StudentResultRepository {
     public StudentResult getStudentResult(int id) {
         StudentResult studentResult = new StudentResult();
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "select * from studentresults where idResult = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
@@ -67,7 +63,7 @@ public class StudentResultRepository {
 
     public void addStudentResult(StudentResult studentResult) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "insert into studentresults (idStudent, dateOfExam, resultInCenter, resultInSchool) values (?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, studentResult.getIdStudent());
@@ -84,7 +80,7 @@ public class StudentResultRepository {
 
     public void updateStudentResult(StudentResult studentResult) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "update studentresults set idStudent = ?, dateOfExam = ?, resultInCenter = ?, resultInSchool = ? where idResult = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, studentResult.getIdResult());
@@ -102,7 +98,7 @@ public class StudentResultRepository {
 
     public void deleteStudentResult(int id) {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = dataSource.getConnection();
             String query = "delete from studentresults where idResult = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
