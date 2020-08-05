@@ -38,5 +38,9 @@ public class VehicleService {
     public void deleteVehicle(int id) {
         vehicleRepository.deleteVehicle(id);
     }
+
+    public void addGroupToVehicle(int id1, int id2) {
+        vehicleRepository.addGroupToVehicle(id1, id2);
+    }
 }
 

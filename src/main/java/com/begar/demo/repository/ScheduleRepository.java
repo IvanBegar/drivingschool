@@ -61,7 +61,7 @@ public class ScheduleRepository {
     public void addSchedule(Schedule schedule) {
         try {
             Connection con = dataSource.getConnection();
-            String query = "insert into schedule (name, scheduleDiscription) values (?, ?);";
+            String query = "insert into schedule (name, scheduleDescription) values (?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, schedule.getName());
             preparedStatement.setString(2, schedule.getScheduleDescription());
@@ -76,7 +76,7 @@ public class ScheduleRepository {
     public void updateSchedule(Schedule schedule) {
         try {
             Connection con = dataSource.getConnection();
-            String query = "update schedule set name = ?, scheduleDiscription = ? where idSchedule = ?;";
+            String query = "update schedule set name = ?, scheduleDescription = ? where idSchedule = ?;";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, schedule.getName());
             preparedStatement.setString(2, schedule.getScheduleDescription());
@@ -107,7 +107,7 @@ public class ScheduleRepository {
         List<SchedulesPerGroupsDTO> schedulesPerGroupsDTOs = new ArrayList<>();
         try {
             Connection con = dataSource.getConnection();
-            String query = "SELECT groups.groupNumber, name, scheduleDiscription FROM schedule\n" +
+            String query = "SELECT groups.groupNumber, name, scheduleDescription FROM schedule\n" +
                     "inner join mydb.groups on schedule.idSchedule=groups.idSchedule;";
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(query);

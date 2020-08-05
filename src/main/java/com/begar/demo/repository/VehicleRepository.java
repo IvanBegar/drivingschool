@@ -1,105 +1,82 @@
 package com.begar.demo.repository;
 
+import com.begar.demo.dto.GroupForVehicleDTO;
 import com.begar.demo.entity.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class VehicleRepository {
 
     @Autowired
-    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
-    public List<Vehicle> getVehicles() {
-        List<Vehicle> vehicles = new ArrayList<>();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from vehicle;";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                Vehicle vehicle = new Vehicle();
-                vehicle.setIdVehicle(resultSet.getInt(1));
-                vehicle.setAutoBrand(resultSet.getString(2));
-                vehicle.setYear(resultSet.getString(3));
-                vehicles.add(vehicle);
-            }
-            statement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return vehicles;
+    public List<Vehicle> getVehicles(){
+        String query = "select * from vehicle;";
+        return jdbcTemplate.query(query, (resultSet, i) -> {
+            Vehicle vehicle = new Vehicle();
+            vehicle.setIdVehicle(resultSet.getInt("idVehicle"));
+            vehicle.setGovNumber(resultSet.getString("govNumber"));
+            vehicle.setAutoBrand(resultSet.getString("autoBrand"));
+            vehicle.setYear(resultSet.getString("year"));
+            vehicle.setGroups(getGroupForVehicleDTO(resultSet.getInt("idVehicle")));
+            return vehicle;
+        });
     }
 
     public Vehicle getVehicle(int id) {
-        Vehicle vehicle = new Vehicle();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from vehicle where idVehicle = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                vehicle.setIdVehicle(resultSet.getInt(1));
-                vehicle.setAutoBrand(resultSet.getString(2));
-                vehicle.setYear(resultSet.getString(3));
-            }
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return vehicle;
+        String query = "select * from vehicle where idVehicle = ?;";
+        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
+            Vehicle vehicle = new Vehicle();
+            vehicle.setIdVehicle(resultSet.getInt("idVehicle"));
+            vehicle.setGovNumber(resultSet.getString("govNumber"));
+            vehicle.setAutoBrand(resultSet.getString("autoBrand"));
+            vehicle.setYear(resultSet.getString("year"));
+            vehicle.setGroups(getGroupForVehicleDTO(resultSet.getInt("idVehicle")));
+            return vehicle;
+        });
     }
 
     public void addVehicle(Vehicle vehicle) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "insert into vehicle (autoBrand, year) values (?, ?);";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setString(1, vehicle.getAutoBrand());
-            preparedStatement.setString(2, vehicle.getYear());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "insert into vehicle (autoBrand, govNumber, year) values (?, ?, ?);";
+        jdbcTemplate.update(query, vehicle.getAutoBrand(), vehicle.getGovNumber(), vehicle.getYear());
     }
 
     public void updateVehicle(Vehicle vehicle) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "update vehicle set autoBrand = ?, year = ? where idVehicle = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setString(1, vehicle.getAutoBrand());
-            preparedStatement.setString(2, vehicle.getYear());
-            preparedStatement.setInt(3,vehicle.getIdVehicle());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "update vehicle set autoBrand = ?, govNumber = ?, year = ? where idVehicle = ?;";
+        jdbcTemplate.update(query, vehicle.getAutoBrand(), vehicle.getGovNumber(), vehicle.getYear(), vehicle.getIdVehicle());
     }
 
     public void deleteVehicle(int id) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "delete from vehicle where idVehicle = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "delete from vehicle where idVehicle = ?;";
+        jdbcTemplate.update(query, id);
+    }
+
+    public List<GroupForVehicleDTO> getGroupForVehicleDTO(int id) {
+        String query = "select group.groupNumber, category.name, schedule.scheduleDescription from mydb.group " +
+                    "inner join group_vehicle on group.idGroup=group_vehicle.idGroup " +
+                    "inner join category on group.idCategory=category.idCategory " +
+                    "inner join schedule on group.idSchedule=schedule.idSchedule " +
+                    "inner join vehicle on group_vehicle.idVehicle=vehicle.idVehicle " +
+                    "where vehicle.idVehicle = ?;";
+        return jdbcTemplate.query(query, new Object[] {id}, (resultSet, i) -> {
+            GroupForVehicleDTO groupDTO = new GroupForVehicleDTO();
+            groupDTO.setGroupNumber(resultSet.getString("groupNumber"));
+            groupDTO.setCategoryName(resultSet.getString("category.name"));
+            groupDTO.setScheduleDescription(resultSet.getString("scheduleDescription"));
+            return groupDTO;
+        });
+    }
+
+    public void addGroupToVehicle(int id1, int id2) {
+        String query = "insert into group_vehicle (idGroup, idVehicle) values (?, ?);";
+        jdbcTemplate.update(query, id1, id2);
     }
 }
 

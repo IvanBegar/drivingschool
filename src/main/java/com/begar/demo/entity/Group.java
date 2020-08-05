@@ -1,20 +1,27 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.CategoryForGroupDTO;
+import com.begar.demo.dto.TeacherForGroupDTO;
+import com.begar.demo.dto.VehicleForGroupDTO;
+import java.util.List;
+
 public class Group {
 
     private int idGroup;
-    private int idCategory;
-    private int idSchedule;
+    private CategoryForGroupDTO category;
+    private Schedule schedule;
     private String groupNumber;
     private String startDate;
     private String endDate;
+    private List<TeacherForGroupDTO> teachers;
+    private List<VehicleForGroupDTO> vehicles;
 
     @Override
     public String toString() {
         return "Group{" +
                 "idGroup=" + idGroup +
-                ", idCategory=" + idCategory +
-                ", idSchedule=" + idSchedule +
+                ", idCategory=" + category +
+                ", idSchedule=" + schedule +
                 ", groupNumber=" + groupNumber +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
@@ -29,20 +36,20 @@ public class Group {
         this.idGroup = idGroup;
     }
 
-    public int getIdCategory() {
-        return idCategory;
+    public CategoryForGroupDTO getCategory() {
+        return category;
     }
 
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(CategoryForGroupDTO category) {
+        this.category = category;
     }
 
-    public int getIdSchedule() {
-        return idSchedule;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
-    public void setIdSchedule(int idSchedule) {
-        this.idSchedule = idSchedule;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public String getGroupNumber() {
@@ -67,5 +74,21 @@ public class Group {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public List<TeacherForGroupDTO> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<TeacherForGroupDTO> teachers) {
+        this.teachers = teachers;
+    }
+
+    public List<VehicleForGroupDTO> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<VehicleForGroupDTO> vehicles) {
+        this.vehicles = vehicles;
     }
 }

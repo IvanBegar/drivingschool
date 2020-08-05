@@ -1,6 +1,9 @@
 package com.begar.demo.entity;
 
+import java.util.List;
+
 public class Teacher {
+
     private int idTeacher;
     private String firstName;
     private String middleName;
@@ -9,6 +12,15 @@ public class Teacher {
     private String address;
     private String phone;
     private double salary;
+    private List<Group> groups;
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
 
     public double getSalary() {
         return salary;
