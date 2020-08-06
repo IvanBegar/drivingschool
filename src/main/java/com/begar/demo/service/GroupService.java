@@ -26,7 +26,7 @@ public class GroupService {
 
     public String updateGroup(Group group, int id1, int id2) {
         String result = "";
-        if (groupRepository.getGroup(group.getIdGroup()).getIdGroup() == 0) {
+        if (groupRepository.getGroup(group.getGroup_id()).getGroup_id() == 0) {
             result = "Group don`t exist!";
         } else {
             groupRepository.updateGroup(group, id1, id2);

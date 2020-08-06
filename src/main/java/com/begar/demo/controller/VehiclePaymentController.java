@@ -25,25 +25,25 @@ public class VehiclePaymentController {
         return vehiclePaymentService.getVehiclePayment(id);
     }
 
-    @PostMapping("/vehicle-payments")
-    public void addUtilityPayment(@RequestBody VehiclePayment vehiclePayment) {
-        vehiclePaymentService.addVehiclePayment(vehiclePayment);
+    @PostMapping("/vehicle-payments/vehicle-id={id}")
+    public void addUtilityPayment(@RequestBody VehiclePayment vehiclePayment, @PathVariable int id) {
+        vehiclePaymentService.addVehiclePayment(vehiclePayment, id);
     }
 
-    @PutMapping("/vehicle-payments")
-    public String updateVehiclePayment(@RequestBody VehiclePayment vehiclePayment) {
-        return vehiclePaymentService.updateVehiclePayment(vehiclePayment);
+    @PutMapping("/vehicle-payments/vehicle-id={id}")
+    public String updateVehiclePayment(@RequestBody VehiclePayment vehiclePayment, @PathVariable int id) {
+        return vehiclePaymentService.updateVehiclePayment(vehiclePayment, id);
     }
 
-    @PatchMapping("/vehicle-payments/{id}")
-    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
-        VehiclePayment vehiclePayment = vehiclePaymentService.getVehiclePayment(id);
+    @PatchMapping("/vehicle-payments/payment-id={id1}+vehicle-id={id2}")
+    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
+        VehiclePayment vehiclePayment = vehiclePaymentService.getVehiclePayment(id1);
         fields.forEach((k,v) -> {
             Field field = ReflectionUtils.findField(VehiclePayment.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, vehiclePayment, v);
         });
-        vehiclePaymentService.updateVehiclePayment(vehiclePayment);
+        vehiclePaymentService.updateVehiclePayment(vehiclePayment, id2);
     }
 
     @DeleteMapping("/vehicle-payments/{id}")

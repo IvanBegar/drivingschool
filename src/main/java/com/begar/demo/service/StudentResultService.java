@@ -20,16 +20,16 @@ public class StudentResultService {
         return studentResultRepository.getStudentResult(id);
     }
 
-    public void addStudentResult(StudentResult studentResult) {
-        studentResultRepository.addStudentResult(studentResult);
+    public void addStudentResult(StudentResult studentResult, int id) {
+        studentResultRepository.addStudentResult(studentResult, id);
     }
 
-    public String updateStudentResult(StudentResult studentResult) {
+    public String updateStudentResult(StudentResult studentResult, int id) {
         String result = "";
-        if (studentResultRepository.getStudentResult(studentResult.getIdResult()).getIdResult() == 0) {
+        if (studentResultRepository.getStudentResult(studentResult.getResult_id()).getResult_id() == 0) {
             result = "StudentResult don`t exist!";
         } else {
-            studentResultRepository.updateStudentResult(studentResult);
+            studentResultRepository.updateStudentResult(studentResult, id);
             result = "StudentResult successfully updated";
         }
         return result;

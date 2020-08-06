@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-
 @Service
 public class TeacherService {
 
@@ -21,16 +20,16 @@ public class TeacherService {
         return teacherRepository.getTeacher(id);
     }
 
-    public void addTeacher(Teacher t1) {
-        teacherRepository.addTeacher(t1);
+    public void addTeacher(Teacher teacher) {
+        teacherRepository.addTeacher(teacher);
     }
 
-    public String updateTeacher(Teacher t1) {
+    public String updateTeacher(Teacher teacher) {
         String result = "";
-        if (teacherRepository.getTeacher(t1.getIdTeacher()).getIdTeacher() == 0) {
+        if (teacherRepository.getTeacher(teacher.getTeacher_id()).getTeacher_id() == 0) {
             result = "Teacher don`t exist!";
         } else {
-            teacherRepository.updateTeacher(t1);
+            teacherRepository.updateTeacher(teacher);
             result = "Teacher successfully updated";
         }
         return result;
@@ -38,6 +37,10 @@ public class TeacherService {
 
     public void deleteTeacher(int id) {
         teacherRepository.deleteTeacher(id);
+    }
+
+    public void addTeacherToGroup(int id1, int id2) {
+        teacherRepository.addTeacherToGroup(id1, id2);
     }
 }
 

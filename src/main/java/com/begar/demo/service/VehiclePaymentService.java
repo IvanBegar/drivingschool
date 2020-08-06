@@ -20,16 +20,16 @@ public class VehiclePaymentService {
         return vehiclePaymentRepository.getVehiclePayment(id);
     }
 
-    public void addVehiclePayment(VehiclePayment vehiclePayment) {
-        vehiclePaymentRepository.addVehiclePayment(vehiclePayment);
+    public void addVehiclePayment(VehiclePayment vehiclePayment, int id) {
+        vehiclePaymentRepository.addVehiclePayment(vehiclePayment, id);
     }
 
-    public String updateVehiclePayment(VehiclePayment vehiclePayment) {
+    public String updateVehiclePayment(VehiclePayment vehiclePayment, int id) {
         String result = "";
-        if (vehiclePaymentRepository.getVehiclePayment(vehiclePayment.getIdVehiclePayment()).getIdVehiclePayment() == 0) {
+        if (vehiclePaymentRepository.getVehiclePayment(vehiclePayment.getVehicle_payment_id()).getVehicle_payment_id() == 0) {
             result = "VehiclePayment don`t exist!";
         } else {
-            vehiclePaymentRepository.updateVehiclePayment(vehiclePayment);
+            vehiclePaymentRepository.updateVehiclePayment(vehiclePayment, id);
             result = "VehiclePayment successfully updated";
         }
         return result;

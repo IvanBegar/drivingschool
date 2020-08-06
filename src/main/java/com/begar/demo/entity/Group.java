@@ -1,64 +1,64 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.CategoryForGroupDTO;
-import com.begar.demo.dto.ScheduleForGroupDTO;
 import com.begar.demo.dto.TeacherForGroupDTO;
-import com.begar.demo.dto.VehicleForGroupDTO;
+import com.begar.demo.dto.VehicleDTO;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
 
-    private int idGroup;
-    private CategoryForGroupDTO category;
-    private ScheduleForGroupDTO schedule;
-    private String groupNumber;
+    private int group_id;
+    private Category category;
+    private Schedule schedule;
+    private String groupName;
     private String startDate;
     private String endDate;
     private List<TeacherForGroupDTO> teachers;
-    private List<VehicleForGroupDTO> vehicles;
+    private List<VehicleDTO> vehicles;
+    private List<Link> links = new ArrayList<>();
 
     @Override
     public String toString() {
         return "Group{" +
-                "idGroup=" + idGroup +
+                "idGroup=" + group_id +
                 ", idCategory=" + category +
                 ", idSchedule=" + schedule +
-                ", groupNumber=" + groupNumber +
+                ", groupNumber=" + groupName +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 '}';
     }
 
-    public int getIdGroup() {
-        return idGroup;
+    public int getGroup_id() {
+        return group_id;
     }
 
-    public void setIdGroup(int idGroup) {
-        this.idGroup = idGroup;
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
     }
 
-    public CategoryForGroupDTO getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryForGroupDTO category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public ScheduleForGroupDTO getSchedule() {
+    public Schedule getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ScheduleForGroupDTO schedule) {
+    public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
 
-    public String getGroupNumber() {
-        return groupNumber;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setGroupNumber(String groupNumber) {
-        this.groupNumber = groupNumber;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getStartDate() {
@@ -85,11 +85,26 @@ public class Group {
         this.teachers = teachers;
     }
 
-    public List<VehicleForGroupDTO> getVehicles() {
+    public List<VehicleDTO> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(List<VehicleForGroupDTO> vehicles) {
+    public void setVehicles(List<VehicleDTO> vehicles) {
         this.vehicles = vehicles;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(String url, String rel) {
+        Link link = new Link();
+        link.setHref(url);
+        link.setRel(rel);
+        links.add(link);
     }
 }

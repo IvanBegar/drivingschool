@@ -2,25 +2,25 @@ package com.begar.demo.entity;
 
 public class Schedule {
 
-    private int idSchedule;
+    private int schedule_id;
     private String name;
-    private String scheduleDescription;
+    private String description;
 
     @Override
     public String toString() {
         return "Schedule{" +
-                "idSchedule=" + idSchedule +
+                "idSchedule=" + schedule_id +
                 ", name='" + name + '\'' +
-                ", scheduleDescription='" + scheduleDescription + '\'' +
+                ", scheduleDescription='" + description + '\'' +
                 '}';
     }
 
-    public int getIdSchedule() {
-        return idSchedule;
+    public int getSchedule_id() {
+        return schedule_id;
     }
 
-    public void setIdSchedule(int idSchedule) {
-        this.idSchedule = idSchedule;
+    public void setSchedule_id(int schedule_id) {
+        this.schedule_id = schedule_id;
     }
 
     public String getName() {
@@ -31,11 +31,11 @@ public class Schedule {
         this.name = name;
     }
 
-    public String getScheduleDescription() {
-        return scheduleDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setScheduleDescription(String scheduleDescription) {
-        this.scheduleDescription = scheduleDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

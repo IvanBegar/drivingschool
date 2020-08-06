@@ -25,17 +25,17 @@ public class PaymentController {
         return paymentService.getPayment(id);
     }
 
-    @PostMapping("/payments/id-student={id}")
+    @PostMapping("/payments/student-id={id}")
     public void addPayment(@RequestBody Payment payment, @PathVariable int id) {
         paymentService.addPayment(payment, id);
     }
 
-    @PutMapping("/payments/id-student={id}")
+    @PutMapping("/payments/student-id={id}")
     public String updatePayment(@RequestBody Payment payment, @PathVariable int id) {
         return paymentService.updatePayment(payment, id);
     }
 
-    @PatchMapping("/payments/id-student={id}")
+    @PatchMapping("/payments/student-id={id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Payment payment = paymentService.getPayment(id);
         fields.forEach((k,v) -> {

@@ -4,7 +4,7 @@ public class SchedulesPerGroupsDTO {
 
     private String groupNumber;
     private String scheduleName;
-    private String scheduleDescription;
+    private String description;
 
     public String getGroupNumber() {
         return groupNumber;
@@ -22,12 +22,12 @@ public class SchedulesPerGroupsDTO {
         this.scheduleName = scheduleName;
     }
 
-    public String getScheduleDescription() {
-        return scheduleDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setScheduleDescription(String scheduleDescription) {
-        this.scheduleDescription = scheduleDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

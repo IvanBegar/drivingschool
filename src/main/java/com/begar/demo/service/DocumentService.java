@@ -26,7 +26,7 @@ public class DocumentService {
 
     public String updateDocument(Document document, int id) {
         String result = "";
-        if (documentRepository.getDocument(document.getIdDocument()).getIdDocument() == 0) {
+        if (documentRepository.getDocument(document.getDocument_id()).getDocument_id() == 0) {
             result = "Document don`t exist!";
         } else {
             documentRepository.updateDocument(document, id);

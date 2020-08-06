@@ -27,17 +27,17 @@ public class StudentController {
         return studentService.getStudent(id);
     }
 
-    @PostMapping("/students/id-group={id}")
+    @PostMapping("/students/group-id={id}")
     public void addStudent(@RequestBody Student student, @PathVariable int id) {
         studentService.addStudent(student, id);
     }
 
-    @PutMapping("/students/id-group={id}")
+    @PutMapping("/students/group-id={id}")
     public String updateStudent(@RequestBody Student student, @PathVariable int id) {
         return studentService.updateStudent(student, id);
     }
 
-    @PatchMapping("/students/id-student={id1}+id-group={id2}")
+    @PatchMapping("/students/student-id={id1}+group-id={id2}")
     public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
         Student student = studentService.getStudent(id1);
         fields.forEach((k, v) -> {

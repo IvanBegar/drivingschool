@@ -26,7 +26,7 @@ public class VehicleService {
 
     public String updateVehicle(Vehicle vehicle) {
         String result = "";
-        if (vehicleRepository.getVehicle(vehicle.getIdVehicle()).getIdVehicle() == 0) {
+        if (vehicleRepository.getVehicle(vehicle.getVehicle_id()).getVehicle_id() == 0) {
             result = "Vehicle don`t exist!";
         } else {
             vehicleRepository.updateVehicle(vehicle);

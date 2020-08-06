@@ -27,7 +27,7 @@ public class ScheduleService {
 
     public String updateSchedule(Schedule schedule) {
         String result = "";
-        if (scheduleRepository.getSchedule(schedule.getIdSchedule()).getIdSchedule() == 0) {
+        if (scheduleRepository.getSchedule(schedule.getSchedule_id()).getSchedule_id() == 0) {
             result = "Schedule don`t exist!";
         } else {
             scheduleRepository.updateSchedule(schedule);

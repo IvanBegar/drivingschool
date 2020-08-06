@@ -26,7 +26,7 @@ public class CategoryService {
 
     public String updateCategory(Category category) {
         String result = "";
-        if (categoryRepository.getCategory(category.getIdCategory()).getIdCategory() == 0) {
+        if (categoryRepository.getCategory(category.getCategory_id()).getCategory_id() == 0) {
             result = "Category don`t exist!";
         } else {
             categoryRepository.updateCategory(category);

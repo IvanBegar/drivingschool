@@ -2,111 +2,53 @@ package com.begar.demo.repository;
 
 import com.begar.demo.entity.StudentResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class StudentResultRepository {
 
     @Autowired
-    private DataSource dataSource;
+    private StudentRepository studentRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public List<StudentResult> getStudentResults() {
-        List<StudentResult> studentResults = new ArrayList<>();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from studentresults;";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                StudentResult studentResult = new StudentResult();
-                studentResult.setIdResult(resultSet.getInt(1));
-                studentResult.setStudent(resultSet.getInt(2));
-                studentResult.setDateOfExam(resultSet.getString(3));
-                studentResult.setResultInCenter(resultSet.getString(4));
-                studentResult.setResultInSchool(resultSet.getString(5));
-                studentResults.add(studentResult);
-            }
-            statement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return studentResults;
+        String query = "select * from student_result;";
+        return jdbcTemplate.query(query, getStudentResultRowMapper());
     }
 
     public StudentResult getStudentResult(int id) {
-        StudentResult studentResult = new StudentResult();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from studentresults where idResult = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                studentResult.setIdResult(resultSet.getInt(1));
-                studentResult.setStudent(resultSet.getInt(2));
-                studentResult.setDateOfExam(resultSet.getString(3));
-                studentResult.setResultInCenter(resultSet.getString(4));
-                studentResult.setResultInSchool(resultSet.getString(5));
-            }
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return studentResult;
+        String query = "select * from student_result where result_id = ?;";
+        return jdbcTemplate.queryForObject(query, getStudentResultRowMapper(), id);
     }
 
-    public void addStudentResult(StudentResult studentResult) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "insert into studentresults (idStudent, dateOfExam, resultInCenter, resultInSchool) values (?, ?, ?, ?);";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, studentResult.getStudent());
-            preparedStatement.setString(2, studentResult.getDateOfExam());
-            preparedStatement.setString(3, studentResult.getResultInCenter());
-            preparedStatement.setString(4, studentResult.getResultInSchool());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void addStudentResult(StudentResult studentResult, int id) {
+        String query = "insert into student_result (student_id, dateOfExam, resultInCenter, resultInSchool) values (?, ?, ?, ?);";
+        jdbcTemplate.update(query, id, studentResult.getDateOfExam(), studentResult.getResultInCenter(), studentResult.getResultInSchool());
     }
 
-    public void updateStudentResult(StudentResult studentResult) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "update studentresults set idStudent = ?, dateOfExam = ?, resultInCenter = ?, resultInSchool = ? where idResult = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, studentResult.getIdResult());
-            preparedStatement.setString(2, studentResult.getDateOfExam());
-            preparedStatement.setString(3, studentResult.getResultInCenter());
-            preparedStatement.setString(4, studentResult.getResultInSchool());
-            preparedStatement.setInt(5, studentResult.getStudent());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void updateStudentResult(StudentResult studentResult, int id) {
+        String query = "update student_result set student_id = ?, dateOfExam = ?, resultInCenter = ?, resultInSchool = ? where result_id = ?;";
+        jdbcTemplate.update(query, id, studentResult.getDateOfExam(), studentResult.getResultInCenter(), studentResult.getResultInSchool(), studentResult.getResult_id());
     }
 
     public void deleteStudentResult(int id) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "delete from studentresults where idResult = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "delete from student_result where result_id = ?;";
+        jdbcTemplate.update(query, id);
+    }
+
+    private RowMapper<StudentResult> getStudentResultRowMapper() {
+        return (resultSet, i) -> {
+            StudentResult studentResult = new StudentResult();
+            studentResult.setResult_id(resultSet.getInt("result_id"));
+            studentResult.setStudent(studentRepository.getStudent(resultSet.getInt("student_id")));
+            studentResult.setDateOfExam(resultSet.getString("dateOfExam"));
+            studentResult.setResultInCenter(resultSet.getString("resultInCenter"));
+            studentResult.setResultInSchool(resultSet.getString("resultInSchool"));
+            return studentResult;
+        };
     }
 }

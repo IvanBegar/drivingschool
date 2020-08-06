@@ -1,22 +1,23 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.GroupDTO;
 import com.begar.demo.dto.GroupForVehicleDTO;
 import java.util.List;
 
 public class Vehicle {
 
-    private int idVehicle;
+    private int vehicle_id;
     private String autoBrand;
     private String govNumber;
     private String year;
-    private List<GroupForVehicleDTO> groups;
+    private List<GroupDTO> groups;
 
-    public int getIdVehicle() {
-        return idVehicle;
+    public int getVehicle_id() {
+        return vehicle_id;
     }
 
-    public void setIdVehicle(int idVehicle) {
-        this.idVehicle = idVehicle;
+    public void setVehicle_id(int vehicle_id) {
+        this.vehicle_id = vehicle_id;
     }
 
     public String getAutoBrand() {
@@ -35,11 +36,11 @@ public class Vehicle {
         this.year = year;
     }
 
-    public List<GroupForVehicleDTO> getGroups() {
+    public List<GroupDTO> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<GroupForVehicleDTO> groups) {
+    public void setGroups(List<GroupDTO> groups) {
         this.groups = groups;
     }
 
@@ -55,7 +56,7 @@ public class Vehicle {
     public String
     toString() {
         return "Vehicle{" +
-                "idVehicle=" + idVehicle +
+                "idVehicle=" + vehicle_id +
                 ", autoBrand='" + autoBrand + '\'' +
                 ", govNumber='" + govNumber + '\'' +
                 ", year='" + year + '\'' +

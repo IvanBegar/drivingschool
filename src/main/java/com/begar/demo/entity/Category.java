@@ -2,17 +2,17 @@ package com.begar.demo.entity;
 
 public class Category {
 
-    private int idCategory;
+    private int category_id;
     private String name;
-    private double categoryPayment;
+    private double payment;
     private String studyTime;
 
-    public int getIdCategory() {
-        return idCategory;
+    public int getCategory_id() {
+        return category_id;
     }
 
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
     }
 
     public String getName() {
@@ -23,12 +23,12 @@ public class Category {
         this.name = name;
     }
 
-    public double getCategoryPayment() {
-        return categoryPayment;
+    public double getPayment() {
+        return payment;
     }
 
-    public void setCategoryPayment(double categoryPayment) {
-        this.categoryPayment = categoryPayment;
+    public void setPayment(double payment) {
+        this.payment = payment;
     }
 
     public String getStudyTime() {
@@ -42,9 +42,9 @@ public class Category {
     @Override
     public String toString() {
         return "Category{" +
-                "idCategory=" + idCategory +
+                "idCategory=" + category_id +
                 ", name='" + name + '\'' +
-                ", categoryPayment=" + categoryPayment +
+                ", categoryPayment=" + payment +
                 ", studeTime='" + studyTime + '\'' +
                 '}';
     }

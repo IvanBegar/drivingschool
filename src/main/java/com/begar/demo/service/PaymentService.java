@@ -26,7 +26,7 @@ public class PaymentService {
 
     public String updatePayment(Payment payment, int id) {
         String result = "";
-        if (paymentRepository.getPayment(payment.getIdPayment()).getIdPayment() == 0) {
+        if (paymentRepository.getPayment(payment.getPayment_id()).getPayment_id() == 0) {
             result = "Payment don`t exist!";
         } else {
             paymentRepository.updatePayment(payment, id);

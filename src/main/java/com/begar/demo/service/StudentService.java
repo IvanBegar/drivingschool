@@ -28,7 +28,7 @@ public class StudentService {
 
     public String updateStudent(Student student, int id) {
         String result = "";
-        if (studentRepository.getStudent(student.getIdStudent()).getIdStudent() == 0) {
+        if (studentRepository.getStudent(student.getStudent_id()).getStudent_id() == 0) {
             result = "Student don`t exist!";
         } else {
             studentRepository.updateStudent(student, id);

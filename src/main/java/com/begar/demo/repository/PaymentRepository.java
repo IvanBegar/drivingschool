@@ -1,9 +1,9 @@
 package com.begar.demo.repository;
 
-import com.begar.demo.dto.StudentDTO;
 import com.begar.demo.entity.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -11,60 +11,44 @@ import java.util.List;
 public class PaymentRepository {
 
     @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public List<Payment> getPayments() {
         String query = "select * from payment;";
-        return jdbcTemplate.query(query, (resultSet, i) -> {
-            Payment payment = new Payment();
-            payment.setIdPayment(resultSet.getInt("idPayment"));
-            payment.setStudent(getStudentDTO(resultSet.getInt("idStudent")));
-            payment.setDateOfPayment(resultSet.getString("dateOfPayment"));
-            payment.setPaymentSize(resultSet.getDouble("paymentSize"));
-            payment.setPaymentComment(resultSet.getString("paymentComment"));
-            return payment;
-        });
+        return jdbcTemplate.query(query, getPaymentRowMapper());
     }
 
     public Payment getPayment(int id) {
-        String query = "select * from payment where idPayment = ?;";
-        return jdbcTemplate.queryForObject(query, new Object[] {id},(resultSet, i) -> {
-                Payment payment = new Payment();
-                payment.setIdPayment(resultSet.getInt("idPayment"));
-                payment.setStudent(getStudentDTO(resultSet.getInt("idStudent")));
-                payment.setDateOfPayment(resultSet.getString("dateOfPayment"));
-                payment.setPaymentSize(resultSet.getDouble("paymentSize"));
-                payment.setPaymentComment(resultSet.getString("paymentComment"));
-                return payment;
-        });
+        String query = "select * from payment where payment_id = ?;";
+        return jdbcTemplate.queryForObject(query, getPaymentRowMapper(), id);
     }
 
     public void addPayment(Payment payment, int id) {
-        String query = "insert into payment (idStudent, dateOfPayment, paymentSize, paymentComment) values (?, ?, ?, ?);";
-        jdbcTemplate.update(query, id, payment.getDateOfPayment(), payment.getPaymentSize(), payment.getPaymentComment());
+        String query = "insert into payment (student_id, date, size, comment) values (?, ?, ?, ?);";
+        jdbcTemplate.update(query, id, payment.getDate(), payment.getSize(), payment.getComment());
     }
 
     public void updatePayment(Payment payment, int id) {
-        String query = "update payment set idStudent = ?, dateOfPayment = ?, paymentSize = ?, paymentComment = ? where idPayment = ?;";
-        jdbcTemplate.update(query, id, payment.getDateOfPayment(), payment.getPaymentSize(), payment.getPaymentComment(), payment.getIdPayment());
+        String query = "update payment set student_id = ?, date = ?, size = ?, comment = ? where payment_id = ?;";
+        jdbcTemplate.update(query, id, payment.getDate(), payment.getSize(), payment.getComment(), payment.getPayment_id());
     }
 
     public void deletePayment(int id) {
-        String query = "delete from payment where idPayment = ?;";
+        String query = "delete from payment where payment_id = ?;";
         jdbcTemplate.update(query, id);
     }
 
-    public StudentDTO getStudentDTO(int id) {
-        String query = "select lastName, firstName, middleName, phone from student " +
-                "inner join documents on student.idStudent=documents.idStudent " +
-                "where student.idStudent = ?;";
-        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
-            StudentDTO studentDTO = new StudentDTO();
-            studentDTO.setFirstName(resultSet.getString("firstName"));
-            studentDTO.setMiddleName(resultSet.getString("middleName"));
-            studentDTO.setLastName(resultSet.getString("lastName"));
-            studentDTO.setPhone(resultSet.getString("phone"));
-            return studentDTO;
-        });
+    private RowMapper<Payment> getPaymentRowMapper() {
+        return (resultSet, i) -> {
+            Payment payment = new Payment();
+            payment.setPayment_id(resultSet.getInt("payment_id"));
+            payment.setStudent(studentRepository.getStudent(resultSet.getInt("student_id")));
+            payment.setDate(resultSet.getString("date"));
+            payment.setSize(resultSet.getDouble("size"));
+            payment.setComment(resultSet.getString("comment"));
+            return payment;
+        };
     }
 }

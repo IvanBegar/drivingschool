@@ -25,25 +25,25 @@ public class StudentResultController {
         return studentResultService.getStudentResult(id);
     }
 
-    @PostMapping("/student-results")
-    public void addStudentResult(@RequestBody StudentResult studentResult) {
-        studentResultService.addStudentResult(studentResult);
+    @PostMapping("/student-results/student-id={id}")
+    public void addStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
+        studentResultService.addStudentResult(studentResult, id);
     }
 
-    @PutMapping("/student-results")
-    public String updateStudentResult(@RequestBody StudentResult studentResult) {
-        return studentResultService.updateStudentResult(studentResult);
+    @PutMapping("/student-results/student-id={id}")
+    public String updateStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
+        return studentResultService.updateStudentResult(studentResult, id);
     }
 
-    @PatchMapping("/student-results/{id}")
-    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
-        StudentResult studentResult = studentResultService.getStudentResult(id);
+    @PatchMapping("/student-results/result-id={id1}+student-id={id2}")
+    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
+        StudentResult studentResult = studentResultService.getStudentResult(id1);
         fields.forEach((k,v) -> {
             Field field = ReflectionUtils.findField(StudentResult.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, studentResult, v);
         });
-        studentResultService.updateStudentResult(studentResult);
+        studentResultService.updateStudentResult(studentResult, id2);
     }
 
     @DeleteMapping("/student-results/{id}")

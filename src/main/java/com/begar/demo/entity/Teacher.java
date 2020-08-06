@@ -1,10 +1,12 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.GroupDTO;
+
 import java.util.List;
 
 public class Teacher {
 
-    private int idTeacher;
+    private int teacher_id;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -12,13 +14,13 @@ public class Teacher {
     private String address;
     private String phone;
     private double salary;
-    private List<Group> groups;
+    private List<GroupDTO> groups;
 
-    public List<Group> getGroups() {
+    public List<GroupDTO> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<GroupDTO> groups) {
         this.groups = groups;
     }
 
@@ -30,12 +32,12 @@ public class Teacher {
         this.salary = salary;
     }
 
-    public int getIdTeacher() {
-        return idTeacher;
+    public int getTeacher_id() {
+        return teacher_id;
     }
 
-    public void setIdTeacher(int idStudent) {
-        this.idTeacher = idStudent;
+    public void setTeacher_id(int idStudent) {
+        this.teacher_id = idStudent;
     }
 
     public String getFirstName() {
@@ -89,7 +91,7 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "idStudent=" + idTeacher +
+                "idStudent=" + teacher_id +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

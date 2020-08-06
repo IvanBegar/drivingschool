@@ -51,7 +51,7 @@ public class VehicleController {
         vehicleService.deleteVehicle(id);
     }
 
-    @RequestMapping("/vehicle-id={id2}+group-id={id1}")
+    @RequestMapping("/group-id={id1}+vehicle-id={id2}")
     public void addGroupToVehicle(@PathVariable int id1, @PathVariable int id2) {
        vehicleService.addGroupToVehicle(id1, id2);
     }

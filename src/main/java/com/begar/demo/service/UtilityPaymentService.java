@@ -26,7 +26,7 @@ public class UtilityPaymentService {
 
     public String updateUtilityPayment(UtilityPayment utilityPayment) {
         String result = "";
-        if (utilityPaymentRepository.getUtilityPayment(utilityPayment.getIdUtilityPayment()).getIdUtilityPayment() == 0) {
+        if (utilityPaymentRepository.getUtilityPayment(utilityPayment.getUtility_payment_id()).getUtility_payment_id() == 0) {
             result = "UtilityPayment don`t exist!";
         } else {
             utilityPaymentRepository.updateUtilityPayment(utilityPayment);

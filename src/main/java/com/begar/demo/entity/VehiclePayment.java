@@ -2,20 +2,20 @@ package com.begar.demo.entity;
 
 public class VehiclePayment {
 
-    private int idVehiclePayment;
-    private int idVehicle;
+    private int vehicle_payment_id;
+    private Vehicle vehicle;
     private double size;
     private String date;
-    private String paymentComment;
+    private String comment;
 
     @Override
     public String toString() {
         return "VehiclePayment{" +
-                "idVehiclePayment=" + idVehiclePayment +
-                ", idVehicle=" + idVehicle +
+                "idVehiclePayment=" + vehicle_payment_id +
+                ", idVehicle=" + vehicle +
                 ", size=" + size +
                 ", date='" + date + '\'' +
-                ", paymentCommnet='" + paymentComment + '\'' +
+                ", paymentCommnet='" + comment + '\'' +
                 '}';
     }
 
@@ -27,28 +27,28 @@ public class VehiclePayment {
         this.size = size;
     }
 
-    public String getPaymentComment() {
-        return paymentComment;
+    public String getComment() {
+        return comment;
     }
 
-    public void setPaymentComment(String paymentComment) {
-        this.paymentComment = paymentComment;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public int getIdVehiclePayment() {
-        return idVehiclePayment;
+    public int getVehicle_payment_id() {
+        return vehicle_payment_id;
     }
 
-    public void setIdVehiclePayment(int idVehiclePayment) {
-        this.idVehiclePayment = idVehiclePayment;
+    public void setVehicle_payment_id(int vehicle_payment_id) {
+        this.vehicle_payment_id = vehicle_payment_id;
     }
 
-    public int getIdVehicle() {
-        return idVehicle;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setIdVehicle(int idVehicle) {
-        this.idVehicle = idVehicle;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public String getDate() {

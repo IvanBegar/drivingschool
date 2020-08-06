@@ -1,63 +1,61 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.StudentDTO;
-
 public class Payment {
 
-    private int idPayment;
-    private StudentDTO student;
-    private String dateOfPayment;
-    private double paymentSize;
-    private String paymentComment;
+    private int payment_id;
+    private Student student;
+    private String date;
+    private double size;
+    private String comment;
 
     @Override
     public String toString() {
         return "Payment{" +
-                "idPayment=" + idPayment +
+                "idPayment=" + payment_id +
                 ", idStudent=" + student +
-                ", dateOfPayment='" + dateOfPayment + '\'' +
-                ", paymentSize=" + paymentSize +
-                ", paymentComment='" + paymentComment + '\'' +
+                ", dateOfPayment='" + date + '\'' +
+                ", paymentSize=" + size +
+                ", paymentComment='" + comment + '\'' +
                 '}';
     }
 
-    public int getIdPayment() {
-        return idPayment;
+    public int getPayment_id() {
+        return payment_id;
     }
 
-    public void setIdPayment(int idPayment) {
-        this.idPayment = idPayment;
+    public void setPayment_id(int payment_id) {
+        this.payment_id = payment_id;
     }
 
-    public StudentDTO getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(StudentDTO student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
-    public String getDateOfPayment() {
-        return dateOfPayment;
+    public String getDate() {
+        return date;
     }
 
-    public void setDateOfPayment(String dateOfPayment) {
-        this.dateOfPayment = dateOfPayment;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public double getPaymentSize() {
-        return paymentSize;
+    public double getSize() {
+        return size;
     }
 
-    public void setPaymentSize(double paymentSize) {
-        this.paymentSize = paymentSize;
+    public void setSize(double size) {
+        this.size = size;
     }
 
-    public String getPaymentComment() {
-        return paymentComment;
+    public String getComment() {
+        return comment;
     }
 
-    public void setPaymentComment(String paymentComment) {
-        this.paymentComment = paymentComment;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

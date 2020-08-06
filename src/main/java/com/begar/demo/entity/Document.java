@@ -1,11 +1,9 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.StudentDTO;
-
 public class Document {
 
-    private int idDocument;
-    private StudentDTO student;
+    private int document_id;
+    private Student student;
     private String photo;
     private String mainDocumentsCopies;
     private String medicalCertificate;
@@ -13,27 +11,27 @@ public class Document {
     @Override
     public String toString() {
         return "Document{" +
-                "idDocument=" + idDocument +
+                "idDocument=" + document_id +
                 ", idStudent=" + student +
                 ", photo='" + photo + '\'' +
                 ", mainDocumentsCopies='" + mainDocumentsCopies + '\'' +
-                ", medicalCartificate='" + medicalCertificate + '\'' +
+                ", medicalCertificate='" + medicalCertificate + '\'' +
                 '}';
     }
 
-    public int getIdDocument() {
-        return idDocument;
+    public int getDocument_id() {
+        return document_id;
     }
 
-    public void setIdDocument(int idDocument) {
-        this.idDocument = idDocument;
+    public void setDocument_id(int document_id) {
+        this.document_id = document_id;
     }
 
-    public StudentDTO getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(StudentDTO student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
@@ -57,7 +55,7 @@ public class Document {
         return medicalCertificate;
     }
 
-    public void setMedicalCertificate(String medicalCartificate) {
-        this.medicalCertificate = medicalCartificate;
+    public void setMedicalCertificate(String medicalCertificate) {
+        this.medicalCertificate = medicalCertificate;
     }
 }

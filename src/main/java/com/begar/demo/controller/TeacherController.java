@@ -38,7 +38,7 @@ public class TeacherController {
     @PatchMapping("/teachers/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Teacher teacher = teacherService.getTeacher(id);
-        fields.forEach((k,v) -> {
+        fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Teacher.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, teacher, v);
@@ -49,5 +49,10 @@ public class TeacherController {
     @DeleteMapping("/teachers/{id}")
     public void deleteTeacher(@PathVariable int id) {
         teacherService.deleteTeacher(id);
+    }
+
+    @RequestMapping("/teacher-id={id1}+group-id={id2}")
+    public void addTeacherToGroup(@PathVariable int id1, @PathVariable int id2) {
+        teacherService.addTeacherToGroup(id1, id2);
     }
 }

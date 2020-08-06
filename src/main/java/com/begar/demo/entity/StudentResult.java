@@ -1,11 +1,9 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.StudentDTO;
-
 public class StudentResult {
 
-    private int idResult;
-    private StudentDTO student;
+    private int result_id;
+    private Student student;
     private String dateOfExam;
     private String resultInCenter;
     private String resultInSchool;
@@ -13,7 +11,7 @@ public class StudentResult {
     @Override
     public String toString() {
         return "StudentResult{" +
-                "idResult=" + idResult +
+                "idResult=" + result_id +
                 ", idStudent=" + student +
                 ", dateOfExam='" + dateOfExam + '\'' +
                 ", resultInCenter='" + resultInCenter + '\'' +
@@ -21,19 +19,19 @@ public class StudentResult {
                 '}';
     }
 
-    public int getIdResult() {
-        return idResult;
+    public int getResult_id() {
+        return result_id;
     }
 
-    public void setIdResult(int idResult) {
-        this.idResult = idResult;
+    public void setResult_id(int result_id) {
+        this.result_id = result_id;
     }
 
-    public StudentDTO getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(StudentDTO student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 

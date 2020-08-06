@@ -3,10 +3,11 @@ package com.begar.demo.repository;
 import com.begar.demo.dto.CategoryForGroupDTO;
 import com.begar.demo.dto.ScheduleForGroupDTO;
 import com.begar.demo.dto.TeacherForGroupDTO;
-import com.begar.demo.dto.VehicleForGroupDTO;
+import com.begar.demo.dto.VehicleDTO;
 import com.begar.demo.entity.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -14,60 +15,42 @@ import java.util.List;
 public class GroupRepository {
 
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public List<Group> getGroups() {
         String query = "select * from mydb.group;";
-        return jdbcTemplate.query(query, (resultSet, i) -> {
-            Group group = new Group();
-            group.setIdGroup(resultSet.getInt(1));
-            group.setCategory(getCategoryForGroupDTO(resultSet.getInt(1)));
-            group.setSchedule(getScheduleForGroupDTO(resultSet.getInt(1)));
-            group.setGroupNumber(resultSet.getString(4));
-            group.setStartDate(resultSet.getString(5));
-            group.setEndDate(resultSet.getString(6));
-            group.setTeachers(getTeacherForGroupDTO(resultSet.getInt(1)));
-            group.setVehicles(getVehicleForGroupDTO(resultSet.getInt(1)));
-            return group;
-        });
+        return jdbcTemplate.query(query, getGroupRowMapper());
     }
 
     public Group getGroup(int id) {
-        String query = "select * from mydb.group where idGroup = ?;";
-        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
-            Group group = new Group();
-            group.setIdGroup(resultSet.getInt(1));
-            group.setCategory(getCategoryForGroupDTO(resultSet.getInt(1)));
-            group.setSchedule(getScheduleForGroupDTO(resultSet.getInt(1)));
-            group.setGroupNumber(resultSet.getString(4));
-            group.setStartDate(resultSet.getString(5));
-            group.setEndDate(resultSet.getString(6));
-            group.setTeachers(getTeacherForGroupDTO(resultSet.getInt(1)));
-            group.setVehicles(getVehicleForGroupDTO(resultSet.getInt(1)));
-            return group;
-        });
+        String query = "select * from mydb.group where group_id = ?;";
+        return jdbcTemplate.queryForObject(query, getGroupRowMapper(), id);
     }
 
     public void addGroup(Group group, int id1, int id2) {
-        String query = "insert into mydb.group (idCategory, idSchedule, groupNumber, startDate, endDate) values (?, ?, ?, ?, ?);";
-        jdbcTemplate.update(query, id1, id2, group.getGroupNumber(), group.getStartDate(), group.getEndDate());
+        String query = "insert into mydb.group (category_id, schedule_id, groupName, startDate, endDate) values (?, ?, ?, ?, ?);";
+        jdbcTemplate.update(query, id1, id2, group.getGroupName(), group.getStartDate(), group.getEndDate());
     }
 
     public void updateGroup(Group group, int id1, int id2) {
-        String query = "update mydb.group set idCategory = ?, idSchedule = ?, groupNumber = ?, startDate = ?, endDate = ? where idGroup = ?;";
-        jdbcTemplate.update(query, id1, id2, group.getGroupNumber(), group.getStartDate(), group.getEndDate(), group.getIdGroup());
+        String query = "update mydb.group set category_id = ?, schedule_id = ?, groupName = ?, startDate = ?, endDate = ? where group_id = ?;";
+        jdbcTemplate.update(query, id1, id2, group.getGroupName(), group.getStartDate(), group.getEndDate(), group.getGroup_id());
     }
 
     public void deleteGroup(int id) {
-        String query = "delete from mydb.group where idGroup = ?;";
+        String query = "delete from mydb.group where id_group = ?;";
         jdbcTemplate.update(query, id);
     }
 
     public List<TeacherForGroupDTO> getTeacherForGroupDTO(int id) {
         String query = "select teacher.firstName, teacher.middleName, teacher.lastName, teacher.phone from teacher " +
-                "inner join teacher_group on teacher.idTeacher=teacher_group.idTeacher " +
-                "inner join mydb.group on teacher_group.idGroup=mydb.group.idGroup " +
-                "where mydb.group.idGroup = ?;";
+                "inner join teacher_group on teacher.teacher_id=teacher_group.teacher_id " +
+                "inner join mydb.group on teacher_group.group_id=mydb.group.group_id " +
+                "where mydb.group.group_id = ?;";
         return jdbcTemplate.query(query, new Object[] {id}, (resultSet, i) -> {
             TeacherForGroupDTO teacherDTO = new TeacherForGroupDTO();
             teacherDTO.setFirstName(resultSet.getString("firstName"));
@@ -78,39 +61,31 @@ public class GroupRepository {
         });
     }
 
-    public List<VehicleForGroupDTO> getVehicleForGroupDTO(int id) {
+    public List<VehicleDTO> getVehicleDTO(int id) {
         String query = "select vehicle.autoBrand, vehicle.govNumber from vehicle " +
-                "inner join group_vehicle on vehicle.idVehicle=group_vehicle.idVehicle " +
-                "inner join mydb.group on group_vehicle.idGroup=group.idGroup " +
-                "where mydb.group.idGroup = ?;";
+                "inner join group_vehicle on vehicle.vehicle_id=group_vehicle.vehicle_id " +
+                "inner join mydb.group on group_vehicle.group_id=mydb.group.group_id " +
+                "where mydb.group.group_id = ?;";
         return jdbcTemplate.query(query, new Object[] {id}, (resultSet, i) -> {
-            VehicleForGroupDTO vehicleForGroupDTO = new VehicleForGroupDTO();
-            vehicleForGroupDTO.setAutoBrand(resultSet.getString("autoBrand"));
-            vehicleForGroupDTO.setGovNumber(resultSet.getString("govNumber"));
-            return vehicleForGroupDTO;
+            VehicleDTO vehicleDTO = new VehicleDTO();
+            vehicleDTO.setAutoBrand(resultSet.getString("autoBrand"));
+            vehicleDTO.setGovNumber(resultSet.getString("govNumber"));
+            return vehicleDTO;
         });
     }
 
-    public CategoryForGroupDTO getCategoryForGroupDTO(int id) {
-        String query = "select category.name from mydb.group " +
-                "inner join category on group.idCategory=category.idCategory " +
-                "where group.idGroup = ?;";
-        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
-            CategoryForGroupDTO categoryForGroupDTO = new CategoryForGroupDTO();
-            categoryForGroupDTO.setCategoryName(resultSet.getString("name"));
-            return categoryForGroupDTO;
-        });
-    }
-
-    public ScheduleForGroupDTO getScheduleForGroupDTO(int id) {
-        String query = "select name, scheduleDescription from mydb.group " +
-                "inner join schedule on group.idSchedule=schedule.idSchedule " +
-                "where group.idGroup = ?;";
-        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
-            ScheduleForGroupDTO scheduleForGroupDTO = new ScheduleForGroupDTO();
-            scheduleForGroupDTO.setName(resultSet.getString("name"));
-            scheduleForGroupDTO.setScheduleDescription(resultSet.getString("scheduleDescription"));
-            return scheduleForGroupDTO;
-        });
+    private RowMapper<Group> getGroupRowMapper() {
+        return (resultSet, i) -> {
+            Group group = new Group();
+            group.setGroup_id(resultSet.getInt("group_id"));
+            group.setCategory(categoryRepository.getCategory(resultSet.getInt("group_id")));
+            group.setSchedule(scheduleRepository.getSchedule(resultSet.getInt("group_id")));
+            group.setGroupName(resultSet.getString("groupName"));
+            group.setStartDate(resultSet.getString("startDate"));
+            group.setEndDate(resultSet.getString("endDate"));
+            group.setTeachers(getTeacherForGroupDTO(resultSet.getInt("group_id")));
+            group.setVehicles(getVehicleDTO(resultSet.getInt("group_id")));
+            return group;
+        };
     }
 }
