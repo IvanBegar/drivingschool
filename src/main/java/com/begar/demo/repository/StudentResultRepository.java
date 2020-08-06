@@ -24,7 +24,7 @@ public class StudentResultRepository {
             while (resultSet.next()) {
                 StudentResult studentResult = new StudentResult();
                 studentResult.setIdResult(resultSet.getInt(1));
-                studentResult.setIdStudent(resultSet.getInt(2));
+                studentResult.setStudent(resultSet.getInt(2));
                 studentResult.setDateOfExam(resultSet.getString(3));
                 studentResult.setResultInCenter(resultSet.getString(4));
                 studentResult.setResultInSchool(resultSet.getString(5));
@@ -48,7 +48,7 @@ public class StudentResultRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 studentResult.setIdResult(resultSet.getInt(1));
-                studentResult.setIdStudent(resultSet.getInt(2));
+                studentResult.setStudent(resultSet.getInt(2));
                 studentResult.setDateOfExam(resultSet.getString(3));
                 studentResult.setResultInCenter(resultSet.getString(4));
                 studentResult.setResultInSchool(resultSet.getString(5));
@@ -66,7 +66,7 @@ public class StudentResultRepository {
             Connection con = dataSource.getConnection();
             String query = "insert into studentresults (idStudent, dateOfExam, resultInCenter, resultInSchool) values (?, ?, ?, ?);";
             PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, studentResult.getIdStudent());
+            preparedStatement.setInt(1, studentResult.getStudent());
             preparedStatement.setString(2, studentResult.getDateOfExam());
             preparedStatement.setString(3, studentResult.getResultInCenter());
             preparedStatement.setString(4, studentResult.getResultInSchool());
@@ -87,7 +87,7 @@ public class StudentResultRepository {
             preparedStatement.setString(2, studentResult.getDateOfExam());
             preparedStatement.setString(3, studentResult.getResultInCenter());
             preparedStatement.setString(4, studentResult.getResultInSchool());
-            preparedStatement.setInt(5, studentResult.getIdStudent());
+            preparedStatement.setInt(5, studentResult.getStudent());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             con.close();

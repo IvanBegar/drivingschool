@@ -25,17 +25,17 @@ public class PaymentController {
         return paymentService.getPayment(id);
     }
 
-    @PostMapping("/payments")
-    public void addPayment(@RequestBody Payment payment) {
-        paymentService.addPayment(payment);
+    @PostMapping("/payments/id-student={id}")
+    public void addPayment(@RequestBody Payment payment, @PathVariable int id) {
+        paymentService.addPayment(payment, id);
     }
 
-    @PutMapping("/payments")
-    public String updatePayment(@RequestBody Payment payment) {
-        return paymentService.updatePayment(payment);
+    @PutMapping("/payments/id-student={id}")
+    public String updatePayment(@RequestBody Payment payment, @PathVariable int id) {
+        return paymentService.updatePayment(payment, id);
     }
 
-    @PatchMapping("/payments/{id}")
+    @PatchMapping("/payments/id-student={id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Payment payment = paymentService.getPayment(id);
         fields.forEach((k,v) -> {
@@ -43,7 +43,7 @@ public class PaymentController {
             field.setAccessible(true);
             ReflectionUtils.setField(field, payment, v);
         });
-        paymentService.updatePayment(payment);
+        paymentService.updatePayment(payment, id);
     }
 
     @DeleteMapping("/payments/{id}")

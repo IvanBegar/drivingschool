@@ -2,107 +2,52 @@ package com.begar.demo.repository;
 
 import com.begar.demo.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class CategoryRepository {
 
     @Autowired
-    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
     public List<Category> getCategories() {
-        List<Category> categories = new ArrayList<>();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from category;";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                Category category = new Category();
-                category.setIdCategory(resultSet.getInt(1));
-                category.setName(resultSet.getString(2));
-                category.setCategoryPayment(resultSet.getDouble(3));
-                category.setStudyTime(resultSet.getString(4));
-                categories.add(category);
-            }
-            statement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
+        String query = "select * from category;";
+        return jdbcTemplate.query(query, (resultSet, i) -> {
+            Category category = new Category();
+            category.setIdCategory(resultSet.getInt("idCategory"));
+            category.setName(resultSet.getString("name"));
+            category.setCategoryPayment(resultSet.getDouble("categoryPayment"));
+            category.setStudyTime(resultSet.getString("studyTime"));
+            return category;
+        });
     }
 
     public Category getCategory(int id) {
-        Category category = new Category();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from category where idCategory = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                category.setIdCategory(resultSet.getInt(1));
-                category.setName(resultSet.getString(2));
-                category.setCategoryPayment(resultSet.getDouble(3));
-                category.setStudyTime(resultSet.getString(4));
-            }
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return category;
+        String query = "select * from category where idCategory = ?;";
+        return jdbcTemplate.queryForObject(query, new Object[]{id}, (resultSet, i) -> {
+            Category category = new Category();
+            category.setIdCategory(resultSet.getInt("idCategory"));
+            category.setName(resultSet.getString("name"));
+            category.setCategoryPayment(resultSet.getDouble("categoryPayment"));
+            category.setStudyTime(resultSet.getString("studyTime"));
+            return category;
+        });
     }
 
     public void addCategory(Category category) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "insert into category (name, categoryPayment, studyTime) values (?, ?, ?);";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setString(1, category.getName());
-            preparedStatement.setDouble(2, category.getCategoryPayment());
-            preparedStatement.setString(3, category.getStudyTime());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "insert into category (name, categoryPayment, studyTime) values (?, ?, ?);";
+        jdbcTemplate.update(query, category.getName(), category.getCategoryPayment(), category.getStudyTime());
     }
 
     public void updateCategory(Category category) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "update category set name = ?, categoryPayment = ?, studyTime = ? where idCategory = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setString(1, category.getName());
-            preparedStatement.setDouble(2, category.getCategoryPayment());
-            preparedStatement.setString(3,category.getStudyTime());
-            preparedStatement.setInt(4,category.getIdCategory());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "update category set name = ?, categoryPayment = ?, studyTime = ? where idCategory = ?;";
+        jdbcTemplate.update(query, category.getName(), category.getCategoryPayment(), category.getStudyTime(), category.getIdCategory());
     }
 
     public void deleteCategory(int id) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "delete from category where idCategory = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "delete from category where idCategory = ?;";
+        jdbcTemplate.update(query, id);
     }
 }

@@ -1,9 +1,11 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.StudentDTO;
+
 public class Document {
 
     private int idDocument;
-    private int idStudent;
+    private StudentDTO student;
     private String photo;
     private String mainDocumentsCopies;
     private String medicalCertificate;
@@ -12,7 +14,7 @@ public class Document {
     public String toString() {
         return "Document{" +
                 "idDocument=" + idDocument +
-                ", idStudent=" + idStudent +
+                ", idStudent=" + student +
                 ", photo='" + photo + '\'' +
                 ", mainDocumentsCopies='" + mainDocumentsCopies + '\'' +
                 ", medicalCartificate='" + medicalCertificate + '\'' +
@@ -27,12 +29,12 @@ public class Document {
         this.idDocument = idDocument;
     }
 
-    public int getIdStudent() {
-        return idStudent;
+    public StudentDTO getStudent() {
+        return student;
     }
 
-    public void setIdStudent(int idStudent) {
-        this.idStudent = idStudent;
+    public void setStudent(StudentDTO student) {
+        this.student = student;
     }
 
     public String getPhoto() {

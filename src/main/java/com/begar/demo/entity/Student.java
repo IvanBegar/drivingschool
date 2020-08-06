@@ -1,9 +1,11 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.GroupForStudentDTO;
+
 public class Student {
 
     private int idStudent;
-    private int IdGroup;
+    private GroupForStudentDTO group;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -19,12 +21,12 @@ public class Student {
         this.idStudent = idStudent;
     }
 
-    public int getIdGroup() {
-        return IdGroup;
+    public GroupForStudentDTO getGroup() {
+        return group;
     }
 
-    public void setIdGroup(int idGroup) {
-        IdGroup = idGroup;
+    public void setGroup(GroupForStudentDTO group) {
+        this.group = group;
     }
 
     public String getFirstName() {
@@ -79,7 +81,7 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "idStudent=" + idStudent +
-                ", IdGroup=" + IdGroup +
+                ", IdGroup=" + group +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

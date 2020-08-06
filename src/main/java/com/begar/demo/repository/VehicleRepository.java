@@ -12,10 +12,6 @@ public class VehicleRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
 
     public List<Vehicle> getVehicles(){
         String query = "select * from vehicle;";

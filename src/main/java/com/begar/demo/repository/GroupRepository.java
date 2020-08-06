@@ -1,6 +1,7 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.dto.CategoryForGroupDTO;
+import com.begar.demo.dto.ScheduleForGroupDTO;
 import com.begar.demo.dto.TeacherForGroupDTO;
 import com.begar.demo.dto.VehicleForGroupDTO;
 import com.begar.demo.entity.Group;
@@ -13,10 +14,6 @@ import java.util.List;
 public class GroupRepository {
 
     @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public List<Group> getGroups() {
@@ -25,7 +22,7 @@ public class GroupRepository {
             Group group = new Group();
             group.setIdGroup(resultSet.getInt(1));
             group.setCategory(getCategoryForGroupDTO(resultSet.getInt(1)));
-            group.setSchedule(scheduleRepository.getSchedule(resultSet.getInt(1)));
+            group.setSchedule(getScheduleForGroupDTO(resultSet.getInt(1)));
             group.setGroupNumber(resultSet.getString(4));
             group.setStartDate(resultSet.getString(5));
             group.setEndDate(resultSet.getString(6));
@@ -33,7 +30,6 @@ public class GroupRepository {
             group.setVehicles(getVehicleForGroupDTO(resultSet.getInt(1)));
             return group;
         });
-
     }
 
     public Group getGroup(int id) {
@@ -42,7 +38,7 @@ public class GroupRepository {
             Group group = new Group();
             group.setIdGroup(resultSet.getInt(1));
             group.setCategory(getCategoryForGroupDTO(resultSet.getInt(1)));
-            group.setSchedule(scheduleRepository.getSchedule(resultSet.getInt(1)));
+            group.setSchedule(getScheduleForGroupDTO(resultSet.getInt(1)));
             group.setGroupNumber(resultSet.getString(4));
             group.setStartDate(resultSet.getString(5));
             group.setEndDate(resultSet.getString(6));
@@ -52,14 +48,14 @@ public class GroupRepository {
         });
     }
 
-    public void addGroup(Group group) {
+    public void addGroup(Group group, int id1, int id2) {
         String query = "insert into mydb.group (idCategory, idSchedule, groupNumber, startDate, endDate) values (?, ?, ?, ?, ?);";
-        jdbcTemplate.update(query, group.getCategory(), group.getSchedule(), group.getGroupNumber(), group.getStartDate(), group.getEndDate());
+        jdbcTemplate.update(query, id1, id2, group.getGroupNumber(), group.getStartDate(), group.getEndDate());
     }
 
-    public void updateGroup(Group group) {
+    public void updateGroup(Group group, int id1, int id2) {
         String query = "update mydb.group set idCategory = ?, idSchedule = ?, groupNumber = ?, startDate = ?, endDate = ? where idGroup = ?;";
-        jdbcTemplate.update(query, group.getCategory(), group.getSchedule(), group.getGroupNumber(), group.getStartDate(), group.getEndDate(), group.getIdGroup());
+        jdbcTemplate.update(query, id1, id2, group.getGroupNumber(), group.getStartDate(), group.getEndDate(), group.getIdGroup());
     }
 
     public void deleteGroup(int id) {
@@ -98,12 +94,23 @@ public class GroupRepository {
     public CategoryForGroupDTO getCategoryForGroupDTO(int id) {
         String query = "select category.name from mydb.group " +
                 "inner join category on group.idCategory=category.idCategory " +
-                "inner join schedule on group.idSchedule=schedule.idSchedule " +
                 "where group.idGroup = ?;";
         return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
             CategoryForGroupDTO categoryForGroupDTO = new CategoryForGroupDTO();
             categoryForGroupDTO.setCategoryName(resultSet.getString("name"));
             return categoryForGroupDTO;
+        });
+    }
+
+    public ScheduleForGroupDTO getScheduleForGroupDTO(int id) {
+        String query = "select name, scheduleDescription from mydb.group " +
+                "inner join schedule on group.idSchedule=schedule.idSchedule " +
+                "where group.idGroup = ?;";
+        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
+            ScheduleForGroupDTO scheduleForGroupDTO = new ScheduleForGroupDTO();
+            scheduleForGroupDTO.setName(resultSet.getString("name"));
+            scheduleForGroupDTO.setScheduleDescription(resultSet.getString("scheduleDescription"));
+            return scheduleForGroupDTO;
         });
     }
 }

@@ -1,6 +1,7 @@
 package com.begar.demo.entity;
 
 import com.begar.demo.dto.CategoryForGroupDTO;
+import com.begar.demo.dto.ScheduleForGroupDTO;
 import com.begar.demo.dto.TeacherForGroupDTO;
 import com.begar.demo.dto.VehicleForGroupDTO;
 import java.util.List;
@@ -9,7 +10,7 @@ public class Group {
 
     private int idGroup;
     private CategoryForGroupDTO category;
-    private Schedule schedule;
+    private ScheduleForGroupDTO schedule;
     private String groupNumber;
     private String startDate;
     private String endDate;
@@ -44,11 +45,11 @@ public class Group {
         this.category = category;
     }
 
-    public Schedule getSchedule() {
+    public ScheduleForGroupDTO getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(ScheduleForGroupDTO schedule) {
         this.schedule = schedule;
     }
 

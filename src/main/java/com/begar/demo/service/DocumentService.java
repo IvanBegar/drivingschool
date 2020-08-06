@@ -20,16 +20,16 @@ public class DocumentService {
         return documentRepository.getDocument(id);
     }
 
-    public void addDocument(Document document) {
-        documentRepository.addDocument(document);
+    public void addDocument(Document document, int id) {
+        documentRepository.addDocument(document, id);
     }
 
-    public String updateDocument(Document document) {
+    public String updateDocument(Document document, int id) {
         String result = "";
         if (documentRepository.getDocument(document.getIdDocument()).getIdDocument() == 0) {
             result = "Document don`t exist!";
         } else {
-            documentRepository.updateDocument(document);
+            documentRepository.updateDocument(document, id);
             result = "Document successfully updated";
         }
         return result;

@@ -22,16 +22,16 @@ public class StudentService {
         return studentRepository.getStudent(id);
     }
 
-    public void addStudent(Student s1) {
-        studentRepository.addStudent(s1);
+    public void addStudent(Student student, int id) {
+        studentRepository.addStudent(student, id);
     }
 
-    public String updateStudent(Student s1) {
+    public String updateStudent(Student student, int id) {
         String result = "";
-        if (studentRepository.getStudent(s1.getIdStudent()).getIdStudent() == 0) {
+        if (studentRepository.getStudent(student.getIdStudent()).getIdStudent() == 0) {
             result = "Student don`t exist!";
         } else {
-            studentRepository.updateStudent(s1);
+            studentRepository.updateStudent(student, id);
             result = "Student successfully updated";
         }
         return result;

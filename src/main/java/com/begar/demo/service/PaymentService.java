@@ -20,16 +20,16 @@ public class PaymentService {
         return paymentRepository.getPayment(id);
     }
 
-    public void addPayment(Payment payment) {
-        paymentRepository.addPayment(payment);
+    public void addPayment(Payment payment, int id) {
+        paymentRepository.addPayment(payment, id);
     }
 
-    public String updatePayment(Payment payment) {
+    public String updatePayment(Payment payment, int id) {
         String result = "";
         if (paymentRepository.getPayment(payment.getIdPayment()).getIdPayment() == 0) {
             result = "Payment don`t exist!";
         } else {
-            paymentRepository.updatePayment(payment);
+            paymentRepository.updatePayment(payment, id);
             result = "Payment successfully updated";
         }
         return result;

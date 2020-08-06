@@ -27,25 +27,25 @@ public class StudentController {
         return studentService.getStudent(id);
     }
 
-    @PostMapping("/students")
-    public void addStudent(@RequestBody Student s1) {
-        studentService.addStudent(s1);
+    @PostMapping("/students/id-group={id}")
+    public void addStudent(@RequestBody Student student, @PathVariable int id) {
+        studentService.addStudent(student, id);
     }
 
-    @PutMapping("/students")
-    public String updateStudent(@RequestBody Student s1) {
-        return studentService.updateStudent(s1);
+    @PutMapping("/students/id-group={id}")
+    public String updateStudent(@RequestBody Student student, @PathVariable int id) {
+        return studentService.updateStudent(student, id);
     }
 
-    @PatchMapping("/students/{id}")
-    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
-        Student student = studentService.getStudent(id);
+    @PatchMapping("/students/id-student={id1}+id-group={id2}")
+    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
+        Student student = studentService.getStudent(id1);
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Student.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, student, v);
         });
-        studentService.updateStudent(student);
+        studentService.updateStudent(student, id2);
     }
 
     @DeleteMapping("/students/{id}")

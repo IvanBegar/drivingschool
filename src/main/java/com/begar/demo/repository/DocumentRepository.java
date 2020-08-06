@@ -1,113 +1,71 @@
 package com.begar.demo.repository;
 
+import com.begar.demo.dto.StudentDTO;
 import com.begar.demo.entity.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class DocumentRepository {
 
     @Autowired
-    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
     public List<Document> getDocuments() {
-        List<Document> documents = new ArrayList<>();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from documents;";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                Document document = new Document();
-                document.setIdDocument(resultSet.getInt(1));
-                document.setIdStudent(resultSet.getInt(2));
-                document.setPhoto(resultSet.getString(3));
-                document.setMainDocumentsCopies(resultSet.getString(4));
-                document.setMedicalCertificate(resultSet.getString(5));
-                documents.add(document);
-            }
-            statement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return documents;
+        String query = "select * from documents;";
+        return jdbcTemplate.query(query, (resultSet, i) -> {
+            Document document = new Document();
+            document.setIdDocument(resultSet.getInt("idDocuments"));
+            document.setStudent(getStudentDTO(resultSet.getInt("idStudent")));
+            document.setPhoto(resultSet.getString("photo"));
+            document.setMainDocumentsCopies(resultSet.getString("mainDocumentsCopies"));
+            document.setMedicalCertificate(resultSet.getString("medicalCertificate"));
+            return document;
+        });
     }
 
     public Document getDocument(int id) {
-        Document document = new Document();
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "select * from documents where idDocuments = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                document.setIdDocument(resultSet.getInt(1));
-                document.setIdStudent(resultSet.getInt(2));
-                document.setPhoto(resultSet.getString(3));
-                document.setMainDocumentsCopies(resultSet.getString(4));
-                document.setMedicalCertificate(resultSet.getString(5));
-            }
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return document;
+        String query = "select * from documents where idDocuments = ?;";
+        return jdbcTemplate.queryForObject(query, new Object[] {id},(resultSet, i) -> {
+            Document document = new Document();
+            document.setIdDocument(resultSet.getInt("idDocuments"));
+            document.setStudent(getStudentDTO(resultSet.getInt("idStudent")));
+            document.setPhoto(resultSet.getString("photo"));
+            document.setMainDocumentsCopies(resultSet.getString("mainDocumentsCopies"));
+            document.setMedicalCertificate(resultSet.getString("medicalCertificate"));
+            return document;
+        });
     }
 
-    public void addDocument(Document document) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "insert into documents (idStudent, photo, mainDocumentsCopies, medicalСertificate) values (?, ?, ?, ?);";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, document.getIdStudent());
-            preparedStatement.setString(2, document.getPhoto());
-            preparedStatement.setString(3, document.getMainDocumentsCopies());
-            preparedStatement.setString(4, document.getMedicalCertificate());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void addDocument(Document document, int id) {
+        String query = "insert into documents (idStudent, photo, mainDocumentsCopies, medicalСertificate) values (?, ?, ?, ?);";
+        jdbcTemplate.update(query, id, document.getPhoto(), document.getMainDocumentsCopies(), document.getMedicalCertificate());
     }
 
-    public void updateDocument(Document document) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "update documents set idStudent = ?, photo = ?, mainDocumentsCopies = ?, medicalСertificate = ? where idDocuments = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, document.getIdStudent());
-            preparedStatement.setString(2, document.getPhoto());
-            preparedStatement.setString(3,document.getMainDocumentsCopies());
-            preparedStatement.setString(4,document.getMedicalCertificate());
-            preparedStatement.setInt(5,document.getIdDocument());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void updateDocument(Document document, int id) {
+        String query = "update documents set idStudent = ?, photo = ?, mainDocumentsCopies = ?, medicalСertificate = ? where idDocuments = ?;";
+        jdbcTemplate.update(query, id, document.getPhoto(), document.getMainDocumentsCopies(), document.getMedicalCertificate(), document.getIdDocument());
     }
 
     public void deleteDocument(int id) {
-        try {
-            Connection con = dataSource.getConnection();
-            String query = "delete from documents where idDocuments = ?;";
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String query = "delete from documents where idDocuments = ?;";
+        jdbcTemplate.update(query, id);
+    }
+
+    public StudentDTO getStudentDTO(int id) {
+        String query = "select lastName, firstName, middleName, phone from student " +
+                "inner join documents on student.idStudent=documents.idStudent " +
+                "where student.idStudent = ?;";
+        return jdbcTemplate.queryForObject(query, new Object[] {id}, (resultSet, i) -> {
+            StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setFirstName(resultSet.getString("firstName"));
+            studentDTO.setMiddleName(resultSet.getString("middleName"));
+            studentDTO.setLastName(resultSet.getString("lastName"));
+            studentDTO.setPhone(resultSet.getString("phone"));
+            return studentDTO;
+        });
     }
 }
 

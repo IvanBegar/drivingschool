@@ -1,9 +1,11 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.dto.StudentDTO;
+
 public class Payment {
 
     private int idPayment;
-    private int idStudent;
+    private StudentDTO student;
     private String dateOfPayment;
     private double paymentSize;
     private String paymentComment;
@@ -12,7 +14,7 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "idPayment=" + idPayment +
-                ", idStudent=" + idStudent +
+                ", idStudent=" + student +
                 ", dateOfPayment='" + dateOfPayment + '\'' +
                 ", paymentSize=" + paymentSize +
                 ", paymentComment='" + paymentComment + '\'' +
@@ -27,12 +29,12 @@ public class Payment {
         this.idPayment = idPayment;
     }
 
-    public int getIdStudent() {
-        return idStudent;
+    public StudentDTO getStudent() {
+        return student;
     }
 
-    public void setIdStudent(int idStudent) {
-        this.idStudent = idStudent;
+    public void setStudent(StudentDTO student) {
+        this.student = student;
     }
 
     public String getDateOfPayment() {
