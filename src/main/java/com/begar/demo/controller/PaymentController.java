@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/payments")
 public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
 
-    @RequestMapping("/payments")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Payment> getPayments() {
         return paymentService.getPayments();
     }
 
-    @GetMapping("/payments/{id}")
+    @GetMapping("/{id}")
     public Payment getPayment(@PathVariable int id) {
         return paymentService.getPayment(id);
     }
 
-    @PostMapping("/payments/student-id={id}")
+    @PostMapping("/student-id={id}")
     public void addPayment(@RequestBody Payment payment, @PathVariable int id) {
         paymentService.addPayment(payment, id);
     }
 
-    @PutMapping("/payments/student-id={id}")
-    public String updatePayment(@RequestBody Payment payment, @PathVariable int id) {
-        return paymentService.updatePayment(payment, id);
+    @PutMapping("/student-id={id}")
+    public void updatePayment(@RequestBody Payment payment, @PathVariable int id) {
+        paymentService.updatePayment(payment, id);
     }
 
-    @PatchMapping("/payments/student-id={id}")
+    @PatchMapping("/student-id={id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Payment payment = paymentService.getPayment(id);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class PaymentController {
         paymentService.updatePayment(payment, id);
     }
 
-    @DeleteMapping("/payments/{id}")
+    @DeleteMapping("/{id}")
     public void deletePayment(@PathVariable int id) {
         paymentService.deletePayment(id);
     }

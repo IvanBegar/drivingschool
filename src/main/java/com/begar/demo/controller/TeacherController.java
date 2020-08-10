@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/teachers")
 public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
 
-    @RequestMapping("/teachers")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Teacher> getTeachers() {
         return teacherService.getTeachers();
     }
 
-    @GetMapping("/teachers/{id}")
+    @GetMapping("/{id}")
     public Teacher getTeacher(@PathVariable int id) {
         return teacherService.getTeacher(id);
     }
 
-    @PostMapping("/teachers")
+    @PostMapping
     public void addTeacher(@RequestBody Teacher t1) {
         teacherService.addTeacher(t1);
     }
 
-    @PutMapping("/teachers")
-    public String updateStudent(@RequestBody Teacher t1) {
-        return teacherService.updateTeacher(t1);
+    @PutMapping
+    public void updateStudent(@RequestBody Teacher t1) {
+        teacherService.updateTeacher(t1);
     }
 
-    @PatchMapping("/teachers/{id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Teacher teacher = teacherService.getTeacher(id);
         fields.forEach((k, v) -> {
@@ -46,7 +47,7 @@ public class TeacherController {
         teacherService.updateTeacher(teacher);
     }
 
-    @DeleteMapping("/teachers/{id}")
+    @DeleteMapping("/{id}")
     public void deleteTeacher(@PathVariable int id) {
         teacherService.deleteTeacher(id);
     }

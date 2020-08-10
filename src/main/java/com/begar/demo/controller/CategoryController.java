@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @RequestMapping("/categories")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Category> getCategories() {
         return categoryService.getCategories();
     }
 
-    @GetMapping("/categories/{id}")
+    @GetMapping("/{id}")
     public Category getCategory(@PathVariable int id) {
         return categoryService.getCategory(id);
     }
 
-    @PostMapping("/categories")
+    @PostMapping
     public void addCategory(@RequestBody Category category) {
         categoryService.addCategory(category);
     }
 
-    @PutMapping("/categories")
-    public String updateCategory(@RequestBody Category category) {
-        return categoryService.updateCategory(category);
+    @PutMapping
+    public void updateCategory(@RequestBody Category category) {
+        categoryService.updateCategory(category);
     }
 
-    @PatchMapping("/categories/{id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Category category = categoryService.getCategory(id);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class CategoryController {
         categoryService.updateCategory(category);
     }
 
-    @DeleteMapping("/categories/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
     }

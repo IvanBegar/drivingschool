@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/utility-payments")
 public class UtilityPaymentController {
 
     @Autowired
     private UtilityPaymentService utilityPaymentService;
 
-    @RequestMapping("/utility-payments")
+    @RequestMapping(method = RequestMethod.GET)
     public List<UtilityPayment> getUtilityPayments() {
         return utilityPaymentService.getUtilityPayments();
     }
 
-    @GetMapping("/utility-payments/{id}")
+    @GetMapping("/{id}")
     public UtilityPayment getUtilityPayment(@PathVariable int id) {
         return utilityPaymentService.getUtilityPayment(id);
     }
 
-    @PostMapping("/utility-payments")
+    @PostMapping
     public void addUtilityPayment(@RequestBody UtilityPayment utilityPayment) {
         utilityPaymentService.addUtilityPayment(utilityPayment);
     }
 
-    @PutMapping("/utility-payments")
-    public String updateUtilityPayment(@RequestBody UtilityPayment utilityPayment) {
-        return utilityPaymentService.updateUtilityPayment(utilityPayment);
+    @PutMapping
+    public void updateUtilityPayment(@RequestBody UtilityPayment utilityPayment) {
+        utilityPaymentService.updateUtilityPayment(utilityPayment);
     }
 
-    @PatchMapping("/utility-payments/{id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         UtilityPayment utilityPayment = utilityPaymentService.getUtilityPayment(id);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class UtilityPaymentController {
         utilityPaymentService.updateUtilityPayment(utilityPayment);
     }
 
-    @DeleteMapping("/utility-payments/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUtilityPayment(@PathVariable int id) {
         utilityPaymentService.deleteUtilityPayment(id);
     }

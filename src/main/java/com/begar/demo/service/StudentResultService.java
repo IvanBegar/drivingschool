@@ -1,6 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.StudentResult;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.StudentResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,12 @@ public class StudentResultService {
         studentResultRepository.addStudentResult(studentResult, id);
     }
 
-    public String updateStudentResult(StudentResult studentResult, int id) {
-        String result = "";
+    public void updateStudentResult(StudentResult studentResult, int id) {
         if (studentResultRepository.getStudentResult(studentResult.getResult_id()).getResult_id() == 0) {
-            result = "StudentResult don`t exist!";
+            throw new NoDataException("Student result don`t exist!");
         } else {
             studentResultRepository.updateStudentResult(studentResult, id);
-            result = "StudentResult successfully updated";
         }
-        return result;
     }
 
     public void deleteStudentResult(int id) {

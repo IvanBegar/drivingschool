@@ -1,6 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.Category;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,12 @@ public class CategoryService {
         categoryRepository.addCategory(category);
     }
 
-    public String updateCategory(Category category) {
-        String result = "";
+    public void updateCategory(Category category) {
         if (categoryRepository.getCategory(category.getCategory_id()).getCategory_id() == 0) {
-            result = "Category don`t exist!";
+            throw new NoDataException("Category don`t exist!");
         } else {
             categoryRepository.updateCategory(category);
-            result = "Category successfully updated";
         }
-        return result;
     }
 
     public void deleteCategory(int id) {

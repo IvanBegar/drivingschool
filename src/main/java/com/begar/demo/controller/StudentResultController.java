@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/student-results")
 public class StudentResultController {
 
     @Autowired
     private StudentResultService studentResultService;
 
-    @RequestMapping("/student-results")
+    @RequestMapping(method = RequestMethod.GET)
     public List<StudentResult> getStudentResults() {
         return studentResultService.getStudentResults();
     }
 
-    @GetMapping("/student-results/{id}")
+    @GetMapping("/{id}")
     public StudentResult getStudentResult(@PathVariable int id) {
         return studentResultService.getStudentResult(id);
     }
 
-    @PostMapping("/student-results/student-id={id}")
+    @PostMapping("/student-id={id}")
     public void addStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
         studentResultService.addStudentResult(studentResult, id);
     }
 
-    @PutMapping("/student-results/student-id={id}")
-    public String updateStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
-        return studentResultService.updateStudentResult(studentResult, id);
+    @PutMapping("/student-id={id}")
+    public void updateStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
+        studentResultService.updateStudentResult(studentResult, id);
     }
 
-    @PatchMapping("/student-results/result-id={id1}+student-id={id2}")
+    @PatchMapping("/result-id={id1}+student-id={id2}")
     public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
         StudentResult studentResult = studentResultService.getStudentResult(id1);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class StudentResultController {
         studentResultService.updateStudentResult(studentResult, id2);
     }
 
-    @DeleteMapping("/student-results/{id}")
+    @DeleteMapping("/{id}")
     public void deleteStudentResult(@PathVariable int id) {
         studentResultService.deleteStudentResult(id);
     }

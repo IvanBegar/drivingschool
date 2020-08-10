@@ -2,6 +2,7 @@ package com.begar.demo.service;
 
 import com.begar.demo.dto.SchedulesPerGroupsDTO;
 import com.begar.demo.entity.Schedule;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,12 @@ public class ScheduleService {
         scheduleRepository.addSchedule(schedule);
     }
 
-    public String updateSchedule(Schedule schedule) {
-        String result = "";
+    public void updateSchedule(Schedule schedule) {
         if (scheduleRepository.getSchedule(schedule.getSchedule_id()).getSchedule_id() == 0) {
-            result = "Schedule don`t exist!";
+            throw new NoDataException("Schedule don`t exist!");
         } else {
             scheduleRepository.updateSchedule(schedule);
-            result = "Schedule successfully updated";
         }
-        return result;
     }
 
     public void deleteSchedule(int id) {

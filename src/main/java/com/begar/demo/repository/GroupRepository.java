@@ -1,25 +1,33 @@
 package com.begar.demo.repository;
 
-import com.begar.demo.dto.CategoryForGroupDTO;
-import com.begar.demo.dto.ScheduleForGroupDTO;
 import com.begar.demo.dto.TeacherForGroupDTO;
 import com.begar.demo.dto.VehicleDTO;
 import com.begar.demo.entity.Group;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
 public class GroupRepository {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final CategoryRepository categoryRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public GroupRepository(CategoryRepository categoryRepository,
+                           ScheduleRepository scheduleRepository,
+                           JdbcTemplate jdbcTemplate,
+                           NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.categoryRepository = categoryRepository;
+        this.scheduleRepository = scheduleRepository;
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     public List<Group> getGroups() {
         String query = "select * from mydb.group;";
@@ -32,8 +40,13 @@ public class GroupRepository {
     }
 
     public void addGroup(Group group, int id1, int id2) {
-        String query = "insert into mydb.group (category_id, schedule_id, groupName, startDate, endDate) values (?, ?, ?, ?, ?);";
-        jdbcTemplate.update(query, id1, id2, group.getGroupName(), group.getStartDate(), group.getEndDate());
+        String query = "insert into mydb.group (category_id, schedule_id, groupName, startDate, endDate) values (:category_id, :schedule_id, :groupName, :startDate, :endDate);";
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource("category_id", id1)
+                .addValue("schedule_id", id2)
+                .addValue("groupName", group.getGroupName())
+                .addValue("startDate", group.getStartDate())
+                .addValue("endDate", group.getEndDate());
+        namedParameterJdbcTemplate.update(query, sqlParameterSource);
     }
 
     public void updateGroup(Group group, int id1, int id2) {

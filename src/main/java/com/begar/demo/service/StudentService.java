@@ -3,6 +3,7 @@ package com.begar.demo.service;
 import com.begar.demo.dto.StudentDocumentsDTO;
 import com.begar.demo.dto.StudentPerCategoryDTO;
 import com.begar.demo.entity.Student;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,12 @@ public class StudentService {
         studentRepository.addStudent(student, id);
     }
 
-    public String updateStudent(Student student, int id) {
-        String result = "";
+    public void updateStudent(Student student, int id) {
         if (studentRepository.getStudent(student.getStudent_id()).getStudent_id() == 0) {
-            result = "Student don`t exist!";
+            throw new NoDataException("Student don`t exist!");
         } else {
             studentRepository.updateStudent(student, id);
-            result = "Student successfully updated";
         }
-        return result;
     }
 
     public void deleteStudent(int id) {

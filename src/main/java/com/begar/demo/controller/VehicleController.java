@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/vehicles")
 public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
 
-    @RequestMapping("/vehicles")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Vehicle> getVehicles() {
         return vehicleService.getVehicles();
     }
 
-    @GetMapping("/vehicles/{id}")
+    @GetMapping("/{id}")
     public Vehicle getVehicle(@PathVariable int id) {
         return vehicleService.getVehicle(id);
     }
 
-    @PostMapping("/vehicles")
+    @PostMapping
     public void addVehicle(@RequestBody Vehicle vehicle) {
         vehicleService.addVehicle(vehicle);
     }
 
-    @PutMapping("/vehicles")
-    public String updateVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.updateVehicle(vehicle);
+    @PutMapping
+    public void updateVehicle(@RequestBody Vehicle vehicle) {
+        vehicleService.updateVehicle(vehicle);
     }
 
-    @PatchMapping("/vehicles/{id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Vehicle vehicle = vehicleService.getVehicle(id);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class VehicleController {
         vehicleService.updateVehicle(vehicle);
     }
 
-    @DeleteMapping("/vehicles/{id}")
+    @DeleteMapping("/{id}")
     public void deleteVehicle(@PathVariable int id) {
         vehicleService.deleteVehicle(id);
     }

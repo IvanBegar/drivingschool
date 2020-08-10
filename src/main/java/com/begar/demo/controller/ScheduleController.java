@@ -11,32 +11,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
 
-    @RequestMapping("/schedules")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Schedule> getSchedules() {
         return scheduleService.getSchedules();
     }
 
-    @GetMapping("/schedules/{id}")
+    @GetMapping("/{id}")
     public Schedule getSchedule(@PathVariable int id) {
         return scheduleService.getSchedule(id);
     }
 
-    @PostMapping("/schedules")
+    @PostMapping
     public void addSchedule(@RequestBody Schedule schedule) {
         scheduleService.addSchedule(schedule);
     }
 
-    @PutMapping("/schedules")
-    public String updateSchedule(@RequestBody Schedule schedule) {
-        return scheduleService.updateSchedule(schedule);
+    @PutMapping
+    public void updateSchedule(@RequestBody Schedule schedule) {
+        scheduleService.updateSchedule(schedule);
     }
 
-    @PatchMapping("/schedules/{id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Schedule schedule = scheduleService.getSchedule(id);
         fields.forEach((k,v) -> {
@@ -47,7 +48,7 @@ public class ScheduleController {
         scheduleService.updateSchedule(schedule);
     }
 
-    @DeleteMapping("/schedules/{id}")
+    @DeleteMapping("/{id}")
     public void deleteSchedule(@PathVariable int id) {
         scheduleService.deleteSchedule(id);
     }

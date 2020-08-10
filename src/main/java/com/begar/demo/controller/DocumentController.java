@@ -10,32 +10,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/documents/")
 public class DocumentController {
 
     @Autowired
     private DocumentService documentService;
 
-    @RequestMapping("/documents")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Document> getDocuments() {
         return documentService.getDocuments();
     }
 
-    @GetMapping("/documents/{id}")
+    @GetMapping("/{id}")
     public Document getDocument(@PathVariable int id) {
         return documentService.getDocument(id);
     }
 
-    @PostMapping("/documents/student-id={id}")
+    @PostMapping("/student-id={id}")
     public void addDocument(@RequestBody Document document, @PathVariable int id) {
         documentService.addDocument(document, id);
     }
 
-    @PutMapping("/documents/student-id={id}")
-    public String updateDocument(@RequestBody Document document, @PathVariable int id) {
-        return documentService.updateDocument(document, id);
+    @PutMapping("/student-id={id}")
+    public void updateDocument(@RequestBody Document document, @PathVariable int id) {
+        documentService.updateDocument(document, id);
     }
 
-    @PatchMapping("/documents/student-id={id}")
+    @PatchMapping("/student-id={id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Document document = documentService.getDocument(id);
         fields.forEach((k,v) -> {
@@ -46,7 +47,7 @@ public class DocumentController {
         documentService.updateDocument(document, id);
     }
 
-    @DeleteMapping("/documents/{id}")
+    @DeleteMapping("/{id}")
     public void deleteDocument(@PathVariable int id) {
         documentService.deleteDocument(id);
     }

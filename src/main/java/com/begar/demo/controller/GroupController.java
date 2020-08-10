@@ -12,32 +12,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/groups")
 public class GroupController {
 
     @Autowired
     private GroupService groupService;
 
-    @RequestMapping("/groups")
+    @RequestMapping(method = RequestMethod.GET)
     public List<Group> getGroups() {
         return groupService.getGroups();
     }
 
-    @GetMapping("/groups/{id}")
+    @GetMapping("/{id}")
     public Group getTeacher(@PathVariable int id) {
         return groupService.getGroup(id);
     }
 
-    @PostMapping("/groups/category-id={id1}+schedule-id={id2}")
+    @PostMapping("/category-id={id1}+schedule-id={id2}")
     public void addGroup(@RequestBody Group group, @PathVariable int id1, @PathVariable int id2) {
         groupService.addGroup(group, id1, id2);
     }
 
-    @PutMapping("/groups/category-id={id1}+schedule-id={id2}")
-    public String updateGroup(@RequestBody Group group, @PathVariable int id1, @PathVariable int id2) {
-        return groupService.updateGroup(group, id1, id2);
+    @PutMapping("/category-id={id1}+schedule-id={id2}")
+    public void updateGroup(@RequestBody Group group, @PathVariable int id1, @PathVariable int id2) {
+        groupService.updateGroup(group, id1, id2);
     }
 
-    @PatchMapping("/groups/group-id={id1}+category-id={id2}+schedule-id={id3}")
+    @PatchMapping("/group-id={id1}+category-id={id2}+schedule-id={id3}")
     public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @PathVariable int id3, @RequestBody Map<Object, Object> fields) {
         Group group = groupService.getGroup(id1);
         fields.forEach((k,v) -> {
@@ -48,7 +49,7 @@ public class GroupController {
         groupService.updateGroup(group, id2, id3);
     }
 
-    @DeleteMapping("/groups/{id}")
+    @DeleteMapping("/{id}")
     public void deleteGroup(@PathVariable int id) {
         groupService.deleteGroup(id);
     }

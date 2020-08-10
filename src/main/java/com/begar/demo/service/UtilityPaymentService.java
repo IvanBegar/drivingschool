@@ -1,6 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.UtilityPayment;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.UtilityPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,12 @@ public class UtilityPaymentService {
         utilityPaymentRepository.addUtilityPayment(utilityPayment);
     }
 
-    public String updateUtilityPayment(UtilityPayment utilityPayment) {
-        String result = "";
+    public void updateUtilityPayment(UtilityPayment utilityPayment) {
         if (utilityPaymentRepository.getUtilityPayment(utilityPayment.getUtility_payment_id()).getUtility_payment_id() == 0) {
-            result = "UtilityPayment don`t exist!";
+            throw new NoDataException("Utility payment don`t exist!");
         } else {
             utilityPaymentRepository.updateUtilityPayment(utilityPayment);
-            result = "UtilityPayment successfully updated";
         }
-        return result;
     }
 
     public void deleteUtilityPayment(int id) {
