@@ -2,16 +2,16 @@ package com.begar.demo.dto;
 
 public class SchedulesPerGroupsDTO {
 
-    private String groupNumber;
+    private String groupName;
     private String scheduleName;
     private String description;
 
-    public String getGroupNumber() {
-        return groupNumber;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setGroupNumber(String groupNumber) {
-        this.groupNumber = groupNumber;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getScheduleName() {

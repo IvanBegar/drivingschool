@@ -15,7 +15,6 @@ public class Group {
     private String endDate;
     private List<TeacherForGroupDTO> teachers;
     private List<VehicleDTO> vehicles;
-    private List<Link> links = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -91,20 +90,5 @@ public class Group {
 
     public void setVehicles(List<VehicleDTO> vehicles) {
         this.vehicles = vehicles;
-    }
-
-    public List<Link> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
-
-    public void addLink(String url, String rel) {
-        Link link = new Link();
-        link.setHref(url);
-        link.setRel(rel);
-        links.add(link);
     }
 }

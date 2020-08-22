@@ -11,12 +11,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/teachers")
+@CrossOrigin
 public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/all")
     public List<Teacher> getTeachers() {
         return teacherService.getTeachers();
     }

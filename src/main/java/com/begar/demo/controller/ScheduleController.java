@@ -12,12 +12,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/schedules")
+@CrossOrigin
 public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/all")
     public List<Schedule> getSchedules() {
         return scheduleService.getSchedules();
     }
@@ -53,7 +54,7 @@ public class ScheduleController {
         scheduleService.deleteSchedule(id);
     }
 
-    @RequestMapping("/schedules-per-groups")
+    @RequestMapping(value = "/per-groups", method = RequestMethod.GET)
     public List<SchedulesPerGroupsDTO> getSchedulesPerGroups() {
         return scheduleService.getSchedulesPerGroups();
     }

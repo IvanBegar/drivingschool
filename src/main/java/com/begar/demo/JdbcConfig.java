@@ -6,6 +6,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
+
 import javax.sql.DataSource;
 
 @Configuration
@@ -33,6 +36,14 @@ public class JdbcConfig {
         @Bean
         public JdbcTemplate jdbcTemplate(@Qualifier("getDataSource") DataSource ds) {
             return new JdbcTemplate(ds);
+    }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowSemicolon(true);
+        return firewall;
     }
 }
 

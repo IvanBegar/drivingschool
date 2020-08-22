@@ -49,10 +49,10 @@ public class ScheduleRepository {
 
     public List<SchedulesPerGroupsDTO> getSchedulesPerGroups() {
         String query = "SELECT group.groupName, name, description FROM schedule\n" +
-                "inner join mydb.group on schedule.schedule_id=groups.schedule_id;";
+                "inner join mydb.group on schedule.schedule_id=group.schedule_id;";
         return jdbcTemplate.query(query, (resultSet, i) -> {
             SchedulesPerGroupsDTO schedulesPerGroupsDTO = new SchedulesPerGroupsDTO();
-            schedulesPerGroupsDTO.setGroupNumber(resultSet.getString("groupName"));
+            schedulesPerGroupsDTO.setGroupName(resultSet.getString("groupName"));
             schedulesPerGroupsDTO.setScheduleName(resultSet.getString("name"));
             schedulesPerGroupsDTO.setDescription(resultSet.getString("description"));
             return schedulesPerGroupsDTO;
