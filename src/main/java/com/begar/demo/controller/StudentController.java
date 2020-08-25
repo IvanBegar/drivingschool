@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/students")
 public class StudentController {
 
@@ -26,6 +27,11 @@ public class StudentController {
     @GetMapping("/{id}")
     public Student getStudent(@PathVariable int id) {
         return studentService.getStudent(id);
+    }
+
+    @GetMapping("/{phone}")
+    public Student getStudentByPhoneNumber(@PathVariable String phone) {
+        return studentService.getStudentByPhoneNumber(phone);
     }
 
     @PostMapping("/group-id={id}")

@@ -8,6 +8,22 @@ public class User {
     private String username;
     private String password;
     private String role;
+    private String phone;
+
+    public User() {
+        this.username = "";
+        this.password = "";
+        this.role = "";
+        this.phone = "";
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getRole() {
         return role;
@@ -39,6 +55,7 @@ public class User {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

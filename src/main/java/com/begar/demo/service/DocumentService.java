@@ -1,7 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.Document;
-import com.begar.demo.exception.NoDataException;
+import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class DocumentService {
 
     public void updateDocument(Document document, int id) {
         if (documentRepository.getDocument(document.getDocument_id()).getDocument_id() == 0) {
-            throw new NoDataException("Document don`t exist!");
+            throw new DataException("Document don`t exist!");
         } else {
             documentRepository.updateDocument(document, id);
         }

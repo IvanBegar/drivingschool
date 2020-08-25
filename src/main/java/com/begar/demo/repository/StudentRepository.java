@@ -27,6 +27,11 @@ public class StudentRepository {
         return jdbcTemplate.queryForObject(query, getStudentRowMapper("student_id", "group_id"), id);
     }
 
+    public Student getStudentByPhoneNumber(String phone) {
+        String query = "select * from mydb.student where phone = ?;";
+        return jdbcTemplate.queryForObject(query, getStudentRowMapper("student_id", "group_id"), phone);
+    }
+
     public void addStudent(Student student, int id) {
         String query = "insert into student (group_id, firstName, middleName, lastName, dateOfBirth, address, phone) values (?, ?, ?, ?, ?, ?, ?);";
         jdbcTemplate.update(query, id, student.getFirstName(), student.getMiddleName(), student.getLastName(), student.getDateOfBirth(), student.getAddress(), student.getPhone());

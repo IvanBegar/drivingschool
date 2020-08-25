@@ -12,8 +12,8 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(value = NoDataException.class)
-    public ResponseEntity<Object> handleNoDataException(NoDataException e) {
+    @ExceptionHandler(value = DataException.class)
+    public ResponseEntity<Object> handleDataException(DataException e) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ApiException apiException = new ApiException(e.getMessage(), badRequest, ZonedDateTime.now());
         return new ResponseEntity<>(apiException, badRequest);
@@ -22,7 +22,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(value = DataAccessException.class)
     public ResponseEntity<Object> handleDataAccessException(DataAccessException e) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
-        ApiException apiException = new ApiException("Such information dont exist in database!", notFound, ZonedDateTime.now());
+        ApiException apiException = new ApiException(e.getMessage(), notFound, ZonedDateTime.now());
         return new ResponseEntity<>(apiException, notFound);
     }
 

@@ -16,14 +16,18 @@ public class UserController {
 
     @RequestMapping
     public User getUser(Authentication authentication) {
-        User user = new User();
-        user.setUsername(authentication.getName());
-        user.setRole(authentication.getAuthorities().toString());
+        User user = getUserByName(authentication.getName());
         return user;
+    }
+
+    @GetMapping("/{username}")
+    public User getUserByName(@PathVariable String username) {
+        return userService.getUserByName(username);
     }
 
     @PostMapping
     public void addNewUser(@RequestBody User user) {
-      userService.addNewUser(user);
+        System.out.println(user.toString());
+        userService.addNewUser(user);
     }
 }

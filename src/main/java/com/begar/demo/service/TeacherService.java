@@ -1,7 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.Teacher;
-import com.begar.demo.exception.NoDataException;
+import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class TeacherService {
 
     public void updateTeacher(Teacher teacher) {
         if (teacherRepository.getTeacher(teacher.getTeacher_id()).getTeacher_id() == 0) {
-            throw new NoDataException("Teacher don`t exist!");
+            throw new DataException("Teacher don`t exist!");
         } else {
             teacherRepository.updateTeacher(teacher);
         }

@@ -1,7 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.Payment;
-import com.begar.demo.exception.NoDataException;
+import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class PaymentService {
 
     public void updatePayment(Payment payment, int id) {
         if (paymentRepository.getPayment(payment.getPayment_id()).getPayment_id() == 0) {
-            throw new NoDataException("Payment don`t exist!");
+            throw new DataException("Payment don`t exist!");
         } else {
             paymentRepository.updatePayment(payment, id);
         }

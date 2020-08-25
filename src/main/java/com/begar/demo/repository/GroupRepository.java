@@ -64,14 +64,14 @@ public class GroupRepository {
                 "inner join teacher_group on teacher.teacher_id=teacher_group.teacher_id " +
                 "inner join mydb.group on teacher_group.group_id=mydb.group.group_id " +
                 "where mydb.group.group_id = ?;";
-        return jdbcTemplate.query(query, new Object[] {id}, (resultSet, i) -> {
+        return jdbcTemplate.query(query, (resultSet, i) -> {
             TeacherForGroupDTO teacherDTO = new TeacherForGroupDTO();
             teacherDTO.setFirstName(resultSet.getString("firstName"));
             teacherDTO.setMiddleName(resultSet.getString("middleName"));
             teacherDTO.setLastName(resultSet.getString("lastName"));
             teacherDTO.setPhone(resultSet.getString("phone"));
             return teacherDTO;
-        });
+        }, id);
     }
 
     public List<VehicleDTO> getVehicleDTO(int id) {
@@ -79,12 +79,12 @@ public class GroupRepository {
                 "inner join group_vehicle on vehicle.vehicle_id=group_vehicle.vehicle_id " +
                 "inner join mydb.group on group_vehicle.group_id=mydb.group.group_id " +
                 "where mydb.group.group_id = ?;";
-        return jdbcTemplate.query(query, new Object[] {id}, (resultSet, i) -> {
+        return jdbcTemplate.query(query, (resultSet, i) -> {
             VehicleDTO vehicleDTO = new VehicleDTO();
             vehicleDTO.setAutoBrand(resultSet.getString("autoBrand"));
             vehicleDTO.setGovNumber(resultSet.getString("govNumber"));
             return vehicleDTO;
-        });
+        }, id);
     }
 
     private RowMapper<Group> getGroupRowMapper() {

@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/groups")
+@CrossOrigin
 public class GroupController {
 
     @Autowired

@@ -1,7 +1,7 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.VehiclePayment;
-import com.begar.demo.exception.NoDataException;
+import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.VehiclePaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class VehiclePaymentService {
 
     public void updateVehiclePayment(VehiclePayment vehiclePayment, int id) {
         if (vehiclePaymentRepository.getVehiclePayment(vehiclePayment.getVehicle_payment_id()).getVehicle_payment_id() == 0) {
-            throw new NoDataException("Vehicle payment don`t exist!");
+            throw new DataException("Vehicle payment don`t exist!");
         } else {
             vehiclePaymentRepository.updateVehiclePayment(vehiclePayment, id);
         }
