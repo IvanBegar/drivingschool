@@ -43,7 +43,7 @@ public class StudentService {
         studentRepository.deleteStudent(id);
     }
 
-    public StudentPerCategoryDTO getStudentsPerCategory(String cat) {
+    public List<StudentPerCategoryDTO> getStudentsPerCategory(String cat) {
         return studentRepository.getStudentsPerCategory(cat);
     }
 

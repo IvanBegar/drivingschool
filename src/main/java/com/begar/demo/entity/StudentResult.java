@@ -1,23 +1,24 @@
 package com.begar.demo.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "student_result", schema = "hibernate_db")
 public class StudentResult {
 
+    @Id
+    @Column(name = "result_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int result_id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
+    @Column(name = "dateOfExam")
     private String dateOfExam;
+    @Column(name = "resultInCenter")
     private String resultInCenter;
+    @Column(name = "resultInSchool")
     private String resultInSchool;
-
-    @Override
-    public String toString() {
-        return "StudentResult{" +
-                "idResult=" + result_id +
-                ", idStudent=" + student +
-                ", dateOfExam='" + dateOfExam + '\'' +
-                ", resultInCenter='" + resultInCenter + '\'' +
-                ", resultInSchool='" + resultInSchool + '\'' +
-                '}';
-    }
 
     public int getResult_id() {
         return result_id;
@@ -57,5 +58,16 @@ public class StudentResult {
 
     public void setResultInSchool(String resultInSchool) {
         this.resultInSchool = resultInSchool;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentResult{" +
+                "result_id=" + result_id +
+                ", student=" + student +
+                ", dateOfExam='" + dateOfExam + '\'' +
+                ", resultInCenter='" + resultInCenter + '\'' +
+                ", resultInSchool='" + resultInSchool + '\'' +
+                '}';
     }
 }

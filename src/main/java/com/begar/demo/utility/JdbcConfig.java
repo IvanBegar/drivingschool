@@ -1,4 +1,4 @@
-package com.begar.demo;
+package com.begar.demo.utility;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,12 +38,12 @@ public class JdbcConfig {
             return new JdbcTemplate(ds);
     }
 
-    @Bean
-    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        @Bean
+        public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
         firewall.setAllowSemicolon(true);
         return firewall;
-    }
+        }
 }
 

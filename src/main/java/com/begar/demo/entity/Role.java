@@ -1,12 +1,24 @@
 package com.begar.demo.entity;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.*;
 
-@Component
+@Entity
+@Table(name = "roles", schema = "hibernate_db")
 public class Role {
 
+    @Id
+    @Column(name = "role_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int role_id;
+    @Column
     private String role;
+
+    public Role(String role) {
+        this.role = role;
+    }
+
+    public Role() {
+    }
 
     public int getRole_id() {
         return role_id;
@@ -22,5 +34,13 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "role_id=" + role_id +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

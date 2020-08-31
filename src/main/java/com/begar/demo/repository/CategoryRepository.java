@@ -1,49 +1,95 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Category;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class CategoryRepository {
 
-    public static final RowMapper<Category> CATEGORY_ROW_MAPPER = (resultSet, i) -> {
-        Category category = new Category();
-        category.setCategory_id(resultSet.getInt("category_id"));
-        category.setName(resultSet.getString("name"));
-        category.setPayment(resultSet.getDouble("payment"));
-        category.setStudyTime(resultSet.getString("studyTime"));
-        return category;
-    };
+    private Transaction transaction;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
 
     public List<Category> getCategories() {
-        String query = "select * from category;";
-        return jdbcTemplate.query(query, CATEGORY_ROW_MAPPER);
+        List categories = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            categories = session.createQuery("from Category").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return categories;
     }
 
     public Category getCategory(int id) {
-        String query = "select * from category where category_id = ?;";
-        return jdbcTemplate.queryForObject(query, CATEGORY_ROW_MAPPER, id);
+        Category category = new Category();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            category = session.get(Category.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return category;
     }
 
     public void addCategory(Category category) {
-        String query = "insert into category (name, payment, studyTime) values (?, ?, ?);";
-        jdbcTemplate.update(query, category.getName(), category.getPayment(), category.getStudyTime());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(category);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void updateCategory(Category category) {
-        String query = "update category set name = ?, payment = ?, studyTime = ? where category_id = ?;";
-        jdbcTemplate.update(query, category.getName(), category.getPayment(), category.getStudyTime(), category.getCategory_id());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(category);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteCategory(int id) {
-        String query = "delete from category where category_id = ?;";
-        jdbcTemplate.update(query, id);
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Category category = session.get(Category.class, id);
+            if (category != null) {
+                session.delete(category);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

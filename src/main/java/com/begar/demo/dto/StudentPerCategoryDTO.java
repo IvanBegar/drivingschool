@@ -3,14 +3,27 @@ package com.begar.demo.dto;
 public class StudentPerCategoryDTO {
 
     private String categoryName;
-    private int idStudent;
-    private int IdGroup;
+    private String groupName;
+    private String lastName;
     private String firstName;
     private String middleName;
-    private String lastName;
     private String dateOfBirth;
-    private String address;
     private String phone;
+    private String address;
+
+    public StudentPerCategoryDTO(String name, String groupName, String lastName, String firstName, String middleName, String dateOfBirth, String phone, String address) {
+        this.categoryName = name;
+        this.groupName = groupName;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.dateOfBirth = dateOfBirth;
+        this.phone = phone;
+        this.address = address;
+    }
+
+    public StudentPerCategoryDTO() {
+    }
 
     public String getCategoryName() {
         return categoryName;
@@ -20,20 +33,12 @@ public class StudentPerCategoryDTO {
         this.categoryName = categoryName;
     }
 
-    public int getIdStudent() {
-        return idStudent;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setIdStudent(int idStudent) {
-        this.idStudent = idStudent;
-    }
-
-    public int getIdGroup() {
-        return IdGroup;
-    }
-
-    public void setIdGroup(int idGroup) {
-        IdGroup = idGroup;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getFirstName() {

@@ -2,60 +2,118 @@ package com.begar.demo.repository;
 
 import com.begar.demo.dto.SchedulesPerGroupsDTO;
 import com.begar.demo.entity.Schedule;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ScheduleRepository {
 
-    public static final RowMapper<Schedule> SCHEDULE_ROW_MAPPER = (resultSet, i) -> {
-        Schedule schedule = new Schedule();
-        schedule.setSchedule_id(resultSet.getInt("schedule_id"));
-        schedule.setName(resultSet.getString("name"));
-        schedule.setDescription(resultSet.getString("description"));
-        return schedule;
-    };
+    private Transaction transaction;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
 
     public List<Schedule> getSchedules() {
-        String query = "select * from schedule;";
-        return jdbcTemplate.query(query, SCHEDULE_ROW_MAPPER);
+        List schedules = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            schedules = session.createQuery("from Schedule ").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return schedules;
     }
 
     public Schedule getSchedule(int id) {
-        String query = "select * from schedule where schedule_id = ?;";
-        return jdbcTemplate.queryForObject(query, SCHEDULE_ROW_MAPPER, id);
+        Schedule schedule = new Schedule();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            schedule = session.get(Schedule.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return schedule;
     }
 
     public void addSchedule(Schedule schedule) {
-        String query = "insert into schedule (name, description) values (?, ?);";
-        jdbcTemplate.update(query, schedule.getName(), schedule.getDescription());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(schedule);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void updateSchedule(Schedule schedule) {
-        String query = "update schedule set name = ?, description = ? where schedule_id = ?;";
-        jdbcTemplate.update(query, schedule.getName(), schedule.getDescription(), schedule.getSchedule_id());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(schedule);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteSchedule(int id) {
-        String query = "delete from schedule where schedule_id = ?;";
-        jdbcTemplate.update(query, id);
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Schedule schedulet = session.get(Schedule.class, id);
+            if (schedulet != null) {
+                session.delete(schedulet);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public List<SchedulesPerGroupsDTO> getSchedulesPerGroups() {
-        String query = "SELECT group.groupName, name, description FROM schedule\n" +
-                "inner join mydb.group on schedule.schedule_id=group.schedule_id;";
-        return jdbcTemplate.query(query, (resultSet, i) -> {
-            SchedulesPerGroupsDTO schedulesPerGroupsDTO = new SchedulesPerGroupsDTO();
-            schedulesPerGroupsDTO.setGroupName(resultSet.getString("groupName"));
-            schedulesPerGroupsDTO.setScheduleName(resultSet.getString("name"));
-            schedulesPerGroupsDTO.setDescription(resultSet.getString("description"));
-            return schedulesPerGroupsDTO;
-        });
-    }
+        List schedules = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            schedules = session.createSQLQuery("SELECT study_group.groupName as groupName, " +
+                    "schedule.name as scheduleName, " +
+                    "schedule.description as description " +
+                    "FROM schedule\n" +
+                    "inner join study_group on schedule.schedule_id=study_group.schedule_id;")
+                    .setResultTransformer(Transformers.aliasToBean(SchedulesPerGroupsDTO.class))
+                    .list();
+        }  catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }
+            return schedules;
+        }
 }

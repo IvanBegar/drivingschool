@@ -25,11 +25,11 @@ public class DocumentService {
         documentRepository.addDocument(document, id);
     }
 
-    public void updateDocument(Document document, int id) {
+    public void updateDocument(Document document) {
         if (documentRepository.getDocument(document.getDocument_id()).getDocument_id() == 0) {
             throw new DataException("Document don`t exist!");
         } else {
-            documentRepository.updateDocument(document, id);
+            documentRepository.updateDocument(document);
         }
     }
 

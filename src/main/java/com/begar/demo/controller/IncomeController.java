@@ -14,17 +14,12 @@ public class IncomeController {
     @Autowired
     private IncomeService incomeService;
 
-    @RequestMapping("/income-for-period/{str}to{end}")
+    @RequestMapping("/income-for-period/{str}_{end}")
     public IncomeForPeriodDTO getIncomeForPeriod(@PathVariable String str, @PathVariable String end) {
         return incomeService.getIncomeForPeriod(str,end);
     }
 
-    @RequestMapping("/income-for-category/{cat}")
-    public IncomePerCategoryDTO getIncomePerCategory(@PathVariable String cat) {
-        return incomeService.getIncomePerCategory(cat);
-    }
-
-    @RequestMapping("/payment-for-period/{str}to{end}")
+    @RequestMapping("/payment-for-period/{str}_{end}")
     public PaymentForPeriodDTO getPaymentForPeriod(@PathVariable String str, @PathVariable String end) {
         return incomeService.getPaymentForPeriod(str,end);
     }

@@ -25,11 +25,11 @@ public class PaymentService {
         paymentRepository.addPayment(payment, id);
     }
 
-    public void updatePayment(Payment payment, int id) {
+    public void updatePayment(Payment payment) {
         if (paymentRepository.getPayment(payment.getPayment_id()).getPayment_id() == 0) {
             throw new DataException("Payment don`t exist!");
         } else {
-            paymentRepository.updatePayment(payment, id);
+            paymentRepository.updatePayment(payment);
         }
     }
 

@@ -1,55 +1,102 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.entity.Document;
+import com.begar.demo.entity.Student;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class DocumentRepository {
 
+    private Transaction transaction;
+
+    @Autowired
+    private SessionFactory sessionFactory;
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     public List<Document> getDocuments() {
-        String query = "select * from document;";
-        return jdbcTemplate.query(query, getDocumentRowMapper());
+        List documents = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            documents = session.createQuery("from Document ").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return documents;
     }
 
     public Document getDocument(int id) {
-        String query = "select * from document where document_id = ?;";
-        return jdbcTemplate.queryForObject(query, getDocumentRowMapper(), id);
+        Document document = new Document();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            document = session.get(Document.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return document;
     }
 
     public void addDocument(Document document, int id) {
-        String query = "insert into document (student_id, photo, mainDocumentsCopies, medicalCertificate) values (?, ?, ?, ?);";
-        jdbcTemplate.update(query, id, document.getPhoto(), document.getMainDocumentsCopies(), document.getMedicalCertificate());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Student student = studentRepository.getStudent(id);
+            document.setStudent(student);
+            session.save(document);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public void updateDocument(Document document, int id) {
-        String query = "update document set student_id = ?, photo = ?, mainDocumentsCopies = ?, medicalCertificate = ? where document_id = ?;";
-        jdbcTemplate.update(query, id, document.getPhoto(), document.getMainDocumentsCopies(), document.getMedicalCertificate(), document.getDocument_id());
+    public void updateDocument(Document document) {
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(document);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteDocument(int id) {
-        String query = "delete from document where document_id = ?;";
-        jdbcTemplate.update(query, id);
-    }
-
-    private RowMapper<Document> getDocumentRowMapper() {
-        return (resultSet, i) -> {
-            Document document = new Document();
-            document.setDocument_id(resultSet.getInt("document_id"));
-            document.setStudent(studentRepository.getStudent(resultSet.getInt("student_id")));
-            document.setPhoto(resultSet.getString("photo"));
-            document.setMainDocumentsCopies(resultSet.getString("mainDocumentsCopies"));
-            document.setMedicalCertificate(resultSet.getString("medicalCertificate"));
-            return document;
-        };
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Document document = session.get(Document.class, id);
+            if (document != null) {
+                session.delete(document);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }
 

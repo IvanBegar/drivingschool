@@ -1,32 +1,43 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.TeacherForGroupDTO;
-import com.begar.demo.dto.VehicleDTO;
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "study_group", schema = "hibernate_db")
 public class Group {
 
+    @Id
+    @Column(name = "group_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int group_id;
+    @OneToOne
+    @JoinColumn(name = "category_id")
     private Category category;
+    @OneToOne
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+    @Column(name = "groupName")
     private String groupName;
+    @Column(name = "startDate")
     private String startDate;
+    @Column(name = "endDate")
     private String endDate;
-    private List<TeacherForGroupDTO> teachers;
-    private List<VehicleDTO> vehicles;
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "idGroup=" + group_id +
-                ", idCategory=" + category +
-                ", idSchedule=" + schedule +
-                ", groupNumber=" + groupName +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                '}';
-    }
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "groups")
+    private List<Teacher> teachers;
+    @JsonBackReference
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    }, fetch = FetchType.EAGER)
+    @JoinTable(name = "group_vehicle",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "vehicle_id")
+    )
+    private List<Vehicle> vehicles;
 
     public int getGroup_id() {
         return group_id;
@@ -76,19 +87,33 @@ public class Group {
         this.endDate = endDate;
     }
 
-    public List<TeacherForGroupDTO> getTeachers() {
+    public List<Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(List<TeacherForGroupDTO> teachers) {
+    public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }
 
-    public List<VehicleDTO> getVehicles() {
+    public List<Vehicle> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(List<VehicleDTO> vehicles) {
+    public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "group_id=" + group_id +
+                ", category=" + category +
+                ", schedule=" + schedule +
+                ", groupName='" + groupName + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", teachers=" + teachers +
+                ", vehicles=" + vehicles +
+                '}';
     }
 }

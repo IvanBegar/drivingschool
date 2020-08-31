@@ -1,5 +1,7 @@
 package com.begar.demo.service;
 
+import com.begar.demo.dto.UserInfoDTO;
+import com.begar.demo.entity.Role;
 import com.begar.demo.entity.User;
 import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.UserRepository;
@@ -15,7 +17,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void addNewUser(User user) {
+    public void addNewUser(UserInfoDTO user) {
         User newUser = new User();
         if (user.getUsername().equals(getUserByName(user.getUsername()).getUsername())) {
             throw new DataException("User with this username already exist!");
@@ -25,9 +27,15 @@ public class UserService {
         newUser.setPhone(user.getPhone());
         System.out.println(user.getPhone());
         if (user.getRole().equals("Admin")) {
-            newUser.setRole("ROLE_ADMIN");
+            Role role = new Role();
+            role.setRole_id(1);
+            role.setRole("ROLE_ADMIN");
+            newUser.setRole(role);
         } else {
-            newUser.setRole("ROLE_USER");
+            Role role = new Role();
+            role.setRole_id(2);
+            role.setRole("ROLE_USER");
+            newUser.setRole(role);
         }
         userRepository.addNewUser(newUser);
     }

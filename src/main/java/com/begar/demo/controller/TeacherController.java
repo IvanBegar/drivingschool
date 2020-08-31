@@ -53,7 +53,7 @@ public class TeacherController {
         teacherService.deleteTeacher(id);
     }
 
-    @RequestMapping("/teacher-id={id1}+group-id={id2}")
+    @RequestMapping(value = "/teacher-id={id1}+group-id={id2}", method = RequestMethod.POST)
     public void addTeacherToGroup(@PathVariable int id1, @PathVariable int id2) {
         teacherService.addTeacherToGroup(id1, id2);
     }

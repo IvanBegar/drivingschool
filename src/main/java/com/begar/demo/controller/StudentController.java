@@ -24,12 +24,12 @@ public class StudentController {
         return studentService.getStudents();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id={id}")
     public Student getStudent(@PathVariable int id) {
         return studentService.getStudent(id);
     }
 
-    @GetMapping("/{phone}")
+    @GetMapping("/phone={phone}")
     public Student getStudentByPhoneNumber(@PathVariable String phone) {
         return studentService.getStudentByPhoneNumber(phone);
     }
@@ -60,8 +60,8 @@ public class StudentController {
         studentService.deleteStudent(id);
     }
 
-    @RequestMapping("/students-per-category/{cat}")
-    public StudentPerCategoryDTO getStudentsPerCategory(@PathVariable String cat) {
+    @RequestMapping("/per-category/{cat}")
+    public List<StudentPerCategoryDTO> getStudentsPerCategory(@PathVariable String cat) {
         return studentService.getStudentsPerCategory(cat);
     }
 
@@ -70,7 +70,7 @@ public class StudentController {
         return studentService.getStudentDocuments(id);
     }
 
-    @RequestMapping("/students-per-group/{id}")
+    @RequestMapping("/per-group/{id}")
     public List<Student> getStudentsPerGroup(@PathVariable int id) {
         return studentService.getStudentsPerGroup(id);
     }

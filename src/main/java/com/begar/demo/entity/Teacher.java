@@ -1,26 +1,47 @@
 package com.begar.demo.entity;
 
-import com.begar.demo.dto.GroupDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "teacher", schema = "hibernate_db")
 public class Teacher {
 
+    @Id
+    @Column(name = "teacher_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int teacher_id;
+    @Column(name = "firstName")
     private String firstName;
+    @Column(name = "middleName")
     private String middleName;
+    @Column(name = "lastName")
     private String lastName;
+    @Column(name = "dateOfBirth")
     private String dateOfBirth;
+    @Column(name = "address")
     private String address;
+    @Column(name = "phone")
     private String phone;
+    @Column(name = "salary")
     private double salary;
-    private List<GroupDTO> groups;
+    @JsonBackReference
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    }, fetch = FetchType.EAGER)
+    @JoinTable(name = "teacher_group",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private List<Group> groups;
 
-    public List<GroupDTO> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<GroupDTO> groups) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 
@@ -91,14 +112,15 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "idStudent=" + teacher_id +
+                "teacher_id=" + teacher_id +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", adress='" + address + '\'' +
+                ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", salary=" + salary +
+                ", groups=" + groups +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/documents/")
+@RequestMapping("/documents")
 @CrossOrigin
 public class DocumentController {
 
@@ -32,12 +32,12 @@ public class DocumentController {
         documentService.addDocument(document, id);
     }
 
-    @PutMapping("/student-id={id}")
-    public void updateDocument(@RequestBody Document document, @PathVariable int id) {
-        documentService.updateDocument(document, id);
+    @PutMapping
+    public void updateDocument(@RequestBody Document document) {
+        documentService.updateDocument(document);
     }
 
-    @PatchMapping("/student-id={id}")
+    @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Document document = documentService.getDocument(id);
         fields.forEach((k,v) -> {
@@ -45,7 +45,7 @@ public class DocumentController {
             field.setAccessible(true);
             ReflectionUtils.setField(field, document, v);
         });
-        documentService.updateDocument(document, id);
+        documentService.updateDocument(document);
     }
 
     @DeleteMapping("/{id}")

@@ -1,56 +1,72 @@
 package com.begar.demo.repository;
 
 import com.begar.demo.dto.IncomeForPeriodDTO;
-import com.begar.demo.dto.IncomePerCategoryDTO;
 import com.begar.demo.dto.PaymentForPeriodDTO;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public class IncomeRepository {
 
+    private Transaction transaction;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
 
     public IncomeForPeriodDTO getIncomeForPeriod(String str, String end) {
-        String query = "select sum(size) from payment where date between ? and ?;";
-        return jdbcTemplate.queryForObject(query, new Object[]{str, end}, (resultSet, i) -> {
-            IncomeForPeriodDTO incomeForPeriodDTO = new IncomeForPeriodDTO();
-            incomeForPeriodDTO.setIncomeForPeriod(resultSet.getDouble("sum(size)"));
-            return incomeForPeriodDTO;
-        });
-    }
-
-    public IncomePerCategoryDTO getIncomePerCategory(String cat) {
-        String query = "select category.name, sum(size) from payment \n" +
-                "inner join student on payment.student_id = student.student_id\n" +
-                "inner join mydb.group on student.group_id=groups.group_id\n" +
-                "inner join category on group.category_id=category.category_id\n" +
-                "where category.name = ? group by mydb.category.name;";
-        return jdbcTemplate.queryForObject(query, new Object[]{cat}, (resultSet, i) -> {
-            IncomePerCategoryDTO incomePerCategoryDTO = new IncomePerCategoryDTO();
-            incomePerCategoryDTO.setCategoryName(resultSet.getString("name"));
-            incomePerCategoryDTO.setCategoryName(resultSet.getString("sum(size)"));
-            return incomePerCategoryDTO;
-        });
+        IncomeForPeriodDTO incomeForPeriodDTO = new IncomeForPeriodDTO();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("select sum(p.size) from Payment as p where p.date between :startDate and :endDate");
+            query.setParameter("startDate", str);
+            query.setParameter("endDate", end);
+            double income = (double) query.getSingleResult();
+            incomeForPeriodDTO.setIncomeForPeriod(income);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return incomeForPeriodDTO;
     }
 
     public PaymentForPeriodDTO getPaymentForPeriod(String str, String end) {
-        String query = "select size from utility_payment where date between ? and ?\n" +
-                "union \n" +
-                "select size from vehicle_payment where date between ? and ?\n" +
-                "union \n" +
-                "select sum(salary) from teacher;";
-        return jdbcTemplate.queryForObject(query, new Object[]{str, end, str, end}, (resultSet, i) -> {
-            PaymentForPeriodDTO paymentForPeriodDTO = new PaymentForPeriodDTO();
-            double sum = 0.0;
-            while (resultSet.next()) {
-                double res = resultSet.getDouble(1);
-                sum = sum + res;
+        PaymentForPeriodDTO paymentForPeriodDTO = new PaymentForPeriodDTO();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createSQLQuery("select size from utility_payment where date between ? and ?\n" +
+                    "union \n" +
+                    "select size from vehicle_payment where date between ? and ?\n" +
+                    "union \n" +
+                    "select sum(salary) from teacher;");
+            query.setParameter(1, str);
+            query.setParameter(2, end);
+            query.setParameter(3, str);
+            query.setParameter(4, end);
+            List<BigDecimal> resultList = query.getResultList();
+            double payment = 0.0;
+            for (BigDecimal d : resultList) {
+                double res = d.doubleValue();
+                payment = payment + res;
             }
-            paymentForPeriodDTO.setPaymentForPeriod(sum);
-            return paymentForPeriodDTO;
-        });
+            paymentForPeriodDTO.setPaymentForPeriod(payment);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return paymentForPeriodDTO;
     }
 }

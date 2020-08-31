@@ -1,23 +1,24 @@
 package com.begar.demo.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "document", schema = "hibernate_db")
 public class Document {
 
+    @Id
+    @Column(name = "document_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int document_id;
+    @OneToOne
+    @JoinColumn(name = "student_id")
     private Student student;
+    @Column(name = "photo")
     private String photo;
+    @Column(name = "mainDocumentsCopies")
     private String mainDocumentsCopies;
+    @Column(name = "medicalCertificate")
     private String medicalCertificate;
-
-    @Override
-    public String toString() {
-        return "Document{" +
-                "idDocument=" + document_id +
-                ", idStudent=" + student +
-                ", photo='" + photo + '\'' +
-                ", mainDocumentsCopies='" + mainDocumentsCopies + '\'' +
-                ", medicalCertificate='" + medicalCertificate + '\'' +
-                '}';
-    }
 
     public int getDocument_id() {
         return document_id;
@@ -57,5 +58,16 @@ public class Document {
 
     public void setMedicalCertificate(String medicalCertificate) {
         this.medicalCertificate = medicalCertificate;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "document_id=" + document_id +
+                ", student=" + student +
+                ", photo='" + photo + '\'' +
+                ", mainDocumentsCopies='" + mainDocumentsCopies + '\'' +
+                ", medicalCertificate='" + medicalCertificate + '\'' +
+                '}';
     }
 }

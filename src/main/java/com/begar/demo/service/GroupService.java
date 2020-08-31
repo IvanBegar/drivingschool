@@ -25,8 +25,8 @@ public class GroupService {
         return group;
     }
 
-    public void addGroup(Group group, int id1, int id2) {
-        groupRepository.addGroup(group, id1, id2);
+    public void addGroup(Group group, int category_id, int schedule_id) {
+        groupRepository.addGroup(group, category_id, schedule_id);
     }
 
     public void updateGroup(Group group, int id1, int id2) {

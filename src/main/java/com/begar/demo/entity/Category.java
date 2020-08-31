@@ -1,10 +1,20 @@
 package com.begar.demo.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "category", schema = "hibernate_db")
 public class Category {
 
+    @Id
+    @Column(name = "category_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int category_id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "payment")
     private double payment;
+    @Column(name = "studyTime")
     private String studyTime;
 
     public int getCategory_id() {
@@ -42,10 +52,10 @@ public class Category {
     @Override
     public String toString() {
         return "Category{" +
-                "idCategory=" + category_id +
+                "category_id=" + category_id +
                 ", name='" + name + '\'' +
-                ", categoryPayment=" + payment +
-                ", studeTime='" + studyTime + '\'' +
+                ", payment=" + payment +
+                ", studyTime='" + studyTime + '\'' +
                 '}';
     }
 }

@@ -1,23 +1,24 @@
 package com.begar.demo.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "vehicle_payment", schema = "hibernate_db")
 public class VehiclePayment {
 
+    @Id
+    @Column(name = "vehicle_payment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int vehicle_payment_id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
     private Vehicle vehicle;
+    @Column(name = "size")
     private double size;
+    @Column(name = "date")
     private String date;
+    @Column(name = "comment")
     private String comment;
-
-    @Override
-    public String toString() {
-        return "VehiclePayment{" +
-                "idVehiclePayment=" + vehicle_payment_id +
-                ", idVehicle=" + vehicle +
-                ", size=" + size +
-                ", date='" + date + '\'' +
-                ", paymentCommnet='" + comment + '\'' +
-                '}';
-    }
 
     public double getSize() {
         return size;
@@ -57,5 +58,16 @@ public class VehiclePayment {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "VehiclePayment{" +
+                "vehicle_payment_id=" + vehicle_payment_id +
+                ", vehicle=" + vehicle +
+                ", size=" + size +
+                ", date='" + date + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

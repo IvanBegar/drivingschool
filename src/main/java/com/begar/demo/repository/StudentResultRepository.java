@@ -1,54 +1,102 @@
 package com.begar.demo.repository;
 
+import com.begar.demo.entity.Student;
 import com.begar.demo.entity.StudentResult;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class StudentResultRepository {
 
+    private Transaction transaction;
+
+    @Autowired
+    private SessionFactory sessionFactory;
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     public List<StudentResult> getStudentResults() {
-        String query = "select * from student_result;";
-        return jdbcTemplate.query(query, getStudentResultRowMapper());
+        List results = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            results = session.createQuery("from StudentResult ").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return results;
     }
 
     public StudentResult getStudentResult(int id) {
-        String query = "select * from student_result where result_id = ?;";
-        return jdbcTemplate.queryForObject(query, getStudentResultRowMapper(), id);
+        StudentResult result = new StudentResult();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            result = session.get(StudentResult.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public void addStudentResult(StudentResult studentResult, int id) {
-        String query = "insert into student_result (student_id, dateOfExam, resultInCenter, resultInSchool) values (?, ?, ?, ?);";
-        jdbcTemplate.update(query, id, studentResult.getDateOfExam(), studentResult.getResultInCenter(), studentResult.getResultInSchool());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Student student = studentRepository.getStudent(id);
+            studentResult.setStudent(student);
+            session.save(studentResult);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void updateStudentResult(StudentResult studentResult, int id) {
-        String query = "update student_result set student_id = ?, dateOfExam = ?, resultInCenter = ?, resultInSchool = ? where result_id = ?;";
-        jdbcTemplate.update(query, id, studentResult.getDateOfExam(), studentResult.getResultInCenter(), studentResult.getResultInSchool(), studentResult.getResult_id());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(studentResult);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteStudentResult(int id) {
-        String query = "delete from student_result where result_id = ?;";
-        jdbcTemplate.update(query, id);
-    }
-
-    private RowMapper<StudentResult> getStudentResultRowMapper() {
-        return (resultSet, i) -> {
-            StudentResult studentResult = new StudentResult();
-            studentResult.setResult_id(resultSet.getInt("result_id"));
-            studentResult.setStudent(studentRepository.getStudent(resultSet.getInt("student_id")));
-            studentResult.setDateOfExam(resultSet.getString("dateOfExam"));
-            studentResult.setResultInCenter(resultSet.getString("resultInCenter"));
-            studentResult.setResultInSchool(resultSet.getString("resultInSchool"));
-            return studentResult;
-        };
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            StudentResult studentResult = session.get(StudentResult.class, id);
+            if (studentResult != null) {
+                session.delete(studentResult);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

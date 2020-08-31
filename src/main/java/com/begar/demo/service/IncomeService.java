@@ -17,10 +17,6 @@ public class IncomeService {
        return incomeRepository.getIncomeForPeriod(str, end);
     }
 
-    public IncomePerCategoryDTO getIncomePerCategory(String cat) {
-        return incomeRepository.getIncomePerCategory(cat);
-    }
-
     public PaymentForPeriodDTO getPaymentForPeriod(String str, String end) {
         return incomeRepository.getPaymentForPeriod(str, end);
     }

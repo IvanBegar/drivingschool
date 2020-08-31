@@ -1,14 +1,29 @@
 package com.begar.demo.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "student", schema = "hibernate_db")
 public class Student {
 
+    @Id
+    @Column(name = "student_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int student_id;
+    @OneToOne
+    @JoinColumn(name = "group_id")
     private Group group;
+    @Column(name = "firstName")
     private String firstName;
+    @Column(name = "middleName")
     private String middleName;
+    @Column(name = "lastName")
     private String lastName;
+    @Column(name = "dateOfBirth")
     private String dateOfBirth;
+    @Column(name = "address")
     private String address;
+    @Column(name = "phone")
     private String phone;
 
     public int getStudent_id() {
@@ -78,13 +93,13 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "idStudent=" + student_id +
-                ", IdGroup=" + group +
+                "student_id=" + student_id +
+                ", group=" + group +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", adress='" + address + '\'' +
+                ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
     }

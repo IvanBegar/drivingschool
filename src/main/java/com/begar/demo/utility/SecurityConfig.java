@@ -1,4 +1,4 @@
-package com.begar.demo;
+package com.begar.demo.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username, password, enabled from users where username = ?")
-                .authoritiesByUsernameQuery("select username, role from user_roles where username = ?")
+                .authoritiesByUsernameQuery("select username, role from users " +
+                        "inner join roles on users.role_id=roles.role_id " +
+                        "where username = ?")
                 .passwordEncoder(passwordEncoder());
     }
 

@@ -1,54 +1,100 @@
 package com.begar.demo.repository;
 
-import com.begar.demo.entity.Payment;
+import com.begar.demo.entity.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class PaymentRepository {
 
+    private Transaction transaction;
+
+    @Autowired
+    private SessionFactory sessionFactory;
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     public List<Payment> getPayments() {
-        String query = "select * from payment;";
-        return jdbcTemplate.query(query, getPaymentRowMapper());
+        List payments = new ArrayList();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            payments = session.createQuery("from Payment").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return payments;
     }
 
     public Payment getPayment(int id) {
-        String query = "select * from payment where payment_id = ?;";
-        return jdbcTemplate.queryForObject(query, getPaymentRowMapper(), id);
+        Payment payment = new Payment();
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            payment = session.get(Payment.class, id);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return payment;
     }
 
     public void addPayment(Payment payment, int id) {
-        String query = "insert into payment (student_id, date, size, comment) values (?, ?, ?, ?);";
-        jdbcTemplate.update(query, id, payment.getDate(), payment.getSize(), payment.getComment());
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Student student = studentRepository.getStudent(id);
+            payment.setStudent(student);
+            session.save(payment);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public void updatePayment(Payment payment, int id) {
-        String query = "update payment set student_id = ?, date = ?, size = ?, comment = ? where payment_id = ?;";
-        jdbcTemplate.update(query, id, payment.getDate(), payment.getSize(), payment.getComment(), payment.getPayment_id());
+    public void updatePayment(Payment payment) {
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(payment);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deletePayment(int id) {
-        String query = "delete from payment where payment_id = ?;";
-        jdbcTemplate.update(query, id);
-    }
-
-    private RowMapper<Payment> getPaymentRowMapper() {
-        return (resultSet, i) -> {
-            Payment payment = new Payment();
-            payment.setPayment_id(resultSet.getInt("payment_id"));
-            payment.setStudent(studentRepository.getStudent(resultSet.getInt("student_id")));
-            payment.setDate(resultSet.getString("date"));
-            payment.setSize(resultSet.getDouble("size"));
-            payment.setComment(resultSet.getString("comment"));
-            return payment;
-        };
+        try {
+            Session session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Payment payment = session.get(Payment.class, id);
+            if (payment != null) {
+                session.delete(payment);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }
