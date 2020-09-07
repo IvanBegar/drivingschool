@@ -34,18 +34,18 @@ public class VehiclePaymentController {
 
     @PutMapping("/vehicle-id={id}")
     public void updateVehiclePayment(@RequestBody VehiclePayment vehiclePayment, @PathVariable int id) {
-        vehiclePaymentService.updateVehiclePayment(vehiclePayment, id);
+        vehiclePaymentService.updateVehiclePayment(vehiclePayment);
     }
 
-    @PatchMapping("/payment-id={id1}+vehicle-id={id2}")
-    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
-        VehiclePayment vehiclePayment = vehiclePaymentService.getVehiclePayment(id1);
+    @PatchMapping("/{id}")
+    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
+        VehiclePayment vehiclePayment = vehiclePaymentService.getVehiclePayment(id);
         fields.forEach((k,v) -> {
             Field field = ReflectionUtils.findField(VehiclePayment.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, vehiclePayment, v);
         });
-        vehiclePaymentService.updateVehiclePayment(vehiclePayment, id2);
+        vehiclePaymentService.updateVehiclePayment(vehiclePayment);
     }
 
     @DeleteMapping("/{id}")

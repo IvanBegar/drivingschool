@@ -1,6 +1,6 @@
 package com.begar.demo.service;
 
-import com.begar.demo.dto.UserInfoDTO;
+import com.begar.demo.dto.request.UserInfoDTO;
 import com.begar.demo.entity.Role;
 import com.begar.demo.entity.User;
 import com.begar.demo.exception.DataException;
@@ -25,7 +25,6 @@ public class UserService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setPhone(user.getPhone());
-        System.out.println(user.getPhone());
         if (user.getRole().equals("Admin")) {
             Role role = new Role();
             role.setRole_id(1);
@@ -37,10 +36,10 @@ public class UserService {
             role.setRole("ROLE_USER");
             newUser.setRole(role);
         }
-        userRepository.addNewUser(newUser);
+        userRepository.save(newUser);
     }
 
     public User getUserByName(String username) {
-        return userRepository.getUserByName(username);
+        return userRepository.findByUsername(username);
     }
 }

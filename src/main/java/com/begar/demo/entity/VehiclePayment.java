@@ -10,13 +10,17 @@ public class VehiclePayment {
     @Column(name = "vehicle_payment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int vehicle_payment_id;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id", referencedColumnName = "vehicle_id")
     private Vehicle vehicle;
+
     @Column(name = "size")
     private double size;
+
     @Column(name = "date")
     private String date;
+
     @Column(name = "comment")
     private String comment;
 

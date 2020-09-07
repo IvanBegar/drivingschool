@@ -1,5 +1,6 @@
 package com.begar.demo.controller;
 
+import com.begar.demo.dto.response.StudentDocumentsDTO;
 import com.begar.demo.entity.Document;
 import com.begar.demo.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,11 @@ public class DocumentController {
     @DeleteMapping("/{id}")
     public void deleteDocument(@PathVariable int id) {
         documentService.deleteDocument(id);
+    }
+
+    @RequestMapping("/student-documents/{id}")
+    public StudentDocumentsDTO getStudentDocuments(@PathVariable int id) {
+        return documentService.getStudentDocuments(id);
     }
 }
 

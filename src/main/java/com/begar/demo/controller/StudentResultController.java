@@ -32,20 +32,20 @@ public class StudentResultController {
         studentResultService.addStudentResult(studentResult, id);
     }
 
-    @PutMapping("/student-id={id}")
-    public void updateStudentResult(@RequestBody StudentResult studentResult, @PathVariable int id) {
-        studentResultService.updateStudentResult(studentResult, id);
+    @PutMapping
+    public void updateStudentResult(@RequestBody StudentResult studentResult) {
+        studentResultService.updateStudentResult(studentResult);
     }
 
-    @PatchMapping("/result-id={id1}+student-id={id2}")
-    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
-        StudentResult studentResult = studentResultService.getStudentResult(id1);
+    @PatchMapping("/{id}")
+    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
+        StudentResult studentResult = studentResultService.getStudentResult(id);
         fields.forEach((k,v) -> {
             Field field = ReflectionUtils.findField(StudentResult.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, studentResult, v);
         });
-        studentResultService.updateStudentResult(studentResult, id2);
+        studentResultService.updateStudentResult(studentResult);
     }
 
     @DeleteMapping("/{id}")

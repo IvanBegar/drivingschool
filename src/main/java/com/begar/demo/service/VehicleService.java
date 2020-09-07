@@ -14,31 +14,28 @@ public class VehicleService {
     private VehicleRepository vehicleRepository;
 
     public List<Vehicle> getVehicles() {
-        return vehicleRepository.getVehicles();
+        return vehicleRepository.findAll();
     }
 
     public Vehicle getVehicle(int id) {
-        return vehicleRepository.getVehicle(id);
+        return vehicleRepository.findById(id).orElseThrow(() -> new DataException("Vehicle with id: " + id +" don't exist!"));
     }
 
     public void addVehicle(Vehicle vehicle) {
-        vehicleRepository.addVehicle(vehicle);
+        vehicleRepository.save(vehicle);
     }
 
     public void updateVehicle(Vehicle vehicle) {
-        if (vehicleRepository.getVehicle(vehicle.getVehicle_id()).getVehicle_id() == 0) {
-            throw new DataException("Vehicle don`t exist!");
-        } else {
-            vehicleRepository.updateVehicle(vehicle);
-        }
+        Vehicle existingVehicle = vehicleRepository.findById(vehicle.getVehicle_id()).orElseThrow(
+                () -> new DataException("Vehicle with id: " + vehicle.getVehicle_id() +" don't exist!"));
+        existingVehicle.setGovNumber(vehicle.getGovNumber());
+        existingVehicle.setYear(vehicle.getYear());
+        existingVehicle.setAutoBrand(vehicle.getAutoBrand());
+        vehicleRepository.save(existingVehicle);
     }
 
     public void deleteVehicle(int id) {
-        vehicleRepository.deleteVehicle(id);
-    }
-
-    public void addGroupToVehicle(int id1, int id2) {
-        vehicleRepository.addGroupToVehicle(id1, id2);
+        vehicleRepository.deleteById(id);
     }
 }
 

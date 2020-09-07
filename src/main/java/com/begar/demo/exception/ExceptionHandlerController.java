@@ -29,7 +29,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(value = ServletException.class)
     public ResponseEntity<Object> handleServletException(ServletException e) {
         HttpStatus methodNotAllowed = HttpStatus.METHOD_NOT_ALLOWED;
-        ApiException apiException = new ApiException("HTTP method not supported!", methodNotAllowed, ZonedDateTime.now());
+        ApiException apiException = new ApiException(e.getMessage(), methodNotAllowed, ZonedDateTime.now());
         return new ResponseEntity<>(apiException, methodNotAllowed);
     }
 }

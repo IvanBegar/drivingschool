@@ -10,19 +10,26 @@ public class Student {
     @Column(name = "student_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int student_id;
+
     @OneToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
     @Column(name = "firstName")
     private String firstName;
+
     @Column(name = "middleName")
     private String middleName;
+
     @Column(name = "lastName")
     private String lastName;
+
     @Column(name = "dateOfBirth")
     private String dateOfBirth;
+
     @Column(name = "address")
     private String address;
+
     @Column(name = "phone")
     private String phone;
 

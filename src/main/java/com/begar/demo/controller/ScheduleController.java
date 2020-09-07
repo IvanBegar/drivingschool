@@ -1,6 +1,5 @@
 package com.begar.demo.controller;
 
-import com.begar.demo.dto.SchedulesPerGroupsDTO;
 import com.begar.demo.entity.Schedule;
 import com.begar.demo.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +51,5 @@ public class ScheduleController {
     @DeleteMapping("/{id}")
     public void deleteSchedule(@PathVariable int id) {
         scheduleService.deleteSchedule(id);
-    }
-
-    @RequestMapping(value = "/per-groups", method = RequestMethod.GET)
-    public List<SchedulesPerGroupsDTO> getSchedulesPerGroups() {
-        return scheduleService.getSchedulesPerGroups();
     }
 }

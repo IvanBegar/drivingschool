@@ -1,8 +1,10 @@
 package com.begar.demo.service;
 
+import com.begar.demo.entity.Vehicle;
 import com.begar.demo.entity.VehiclePayment;
 import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.VehiclePaymentRepository;
+import com.begar.demo.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,27 +15,34 @@ public class VehiclePaymentService {
     @Autowired
     private VehiclePaymentRepository vehiclePaymentRepository;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     public List<VehiclePayment> getVehiclePayments() {
-        return vehiclePaymentRepository.getVehiclePayments();
+        return vehiclePaymentRepository.findAll();
     }
 
     public VehiclePayment getVehiclePayment(int id) {
-        return vehiclePaymentRepository.getVehiclePayment(id);
+        return vehiclePaymentRepository.findById(id).orElseThrow(() -> new DataException("Student with id: " + id + " don't exist!"));
     }
 
     public void addVehiclePayment(VehiclePayment vehiclePayment, int id) {
-        vehiclePaymentRepository.addVehiclePayment(vehiclePayment, id);
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new DataException("Vehicle with id: " + id +" don't exist!"));
+        vehiclePayment.setVehicle(vehicle);
+        vehiclePaymentRepository.save(vehiclePayment);
     }
 
-    public void updateVehiclePayment(VehiclePayment vehiclePayment, int id) {
-        if (vehiclePaymentRepository.getVehiclePayment(vehiclePayment.getVehicle_payment_id()).getVehicle_payment_id() == 0) {
-            throw new DataException("Vehicle payment don`t exist!");
-        } else {
-            vehiclePaymentRepository.updateVehiclePayment(vehiclePayment, id);
-        }
+    public void updateVehiclePayment(VehiclePayment vehiclePayment) {
+        VehiclePayment existingVehiclePayment = vehiclePaymentRepository.findById(vehiclePayment.getVehicle_payment_id()).orElseThrow(
+                () -> new DataException("Vehicle Payment with id: " + vehiclePayment.getVehicle_payment_id() +" don't exist!"));
+        existingVehiclePayment.setVehicle(vehiclePayment.getVehicle());
+        existingVehiclePayment.setDate(vehiclePayment.getDate());
+        existingVehiclePayment.setSize(vehiclePayment.getSize());
+        existingVehiclePayment.setComment(vehiclePayment.getComment());
+        vehiclePaymentRepository.save(existingVehiclePayment);
     }
 
     public void deleteVehiclePayment(int id) {
-        vehiclePaymentRepository.deleteVehiclePayment(id);
+        vehiclePaymentRepository.deleteById(id);
     }
 }

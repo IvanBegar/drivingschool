@@ -10,13 +10,17 @@ public class StudentResult {
     @Column(name = "result_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int result_id;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
+
     @Column(name = "dateOfExam")
     private String dateOfExam;
+
     @Column(name = "resultInCenter")
     private String resultInCenter;
+
     @Column(name = "resultInSchool")
     private String resultInSchool;
 

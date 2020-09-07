@@ -14,31 +14,32 @@ public class TeacherService {
     private TeacherRepository teacherRepository;
 
     public List<Teacher> getTeachers() {
-        return teacherRepository.getTeachers();
+        return teacherRepository.findAll();
     }
 
     public Teacher getTeacher(int id) {
-        return teacherRepository.getTeacher(id);
+        return teacherRepository.findById(id).orElseThrow(() -> new DataException("Teacher with id: " + id +" don't exist!"));
     }
 
     public void addTeacher(Teacher teacher) {
-        teacherRepository.addTeacher(teacher);
+        teacherRepository.save(teacher);
     }
 
     public void updateTeacher(Teacher teacher) {
-        if (teacherRepository.getTeacher(teacher.getTeacher_id()).getTeacher_id() == 0) {
-            throw new DataException("Teacher don`t exist!");
-        } else {
-            teacherRepository.updateTeacher(teacher);
-        }
+        Teacher existingTeacher = teacherRepository.findById(teacher.getTeacher_id()).orElseThrow(
+                () -> new DataException("Teacher with id: " + teacher.getTeacher_id() +" don't exist!"));
+        existingTeacher.setAddress(teacher.getAddress());
+        existingTeacher.setPhone(teacher.getPhone());
+        existingTeacher.setDateOfBirth(teacher.getDateOfBirth());
+        existingTeacher.setLastName(teacher.getLastName());
+        existingTeacher.setMiddleName(teacher.getMiddleName());
+        existingTeacher.setFirstName(teacher.getFirstName());
+        existingTeacher.setSalary(teacher.getSalary());
+        teacherRepository.save(existingTeacher);
     }
 
     public void deleteTeacher(int id) {
-        teacherRepository.deleteTeacher(id);
-    }
-
-    public void addTeacherToGroup(int id1, int id2) {
-        teacherRepository.addTeacherToGroup(id1, id2);
+        teacherRepository.deleteById(id);
     }
 }
 

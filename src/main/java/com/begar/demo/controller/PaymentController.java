@@ -1,5 +1,7 @@
 package com.begar.demo.controller;
 
+import com.begar.demo.dto.response.IncomeForPeriodDTO;
+import com.begar.demo.dto.response.PaymentForPeriodDTO;
 import com.begar.demo.entity.Payment;
 import com.begar.demo.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,15 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     public void deletePayment(@PathVariable int id) {
         paymentService.deletePayment(id);
+    }
+
+    @RequestMapping("/income-for-period/{str}_{end}")
+    public IncomeForPeriodDTO getIncomeForPeriod(@PathVariable String str, @PathVariable String end) {
+        return paymentService.getIncomeForPeriod(str, end);
+    }
+
+    @RequestMapping("/for-period/{str}_{end}")
+    public PaymentForPeriodDTO getPaymentForPeriod(@PathVariable String str, @PathVariable String end) {
+        return paymentService.getPaymentForPeriod(str,end);
     }
 }

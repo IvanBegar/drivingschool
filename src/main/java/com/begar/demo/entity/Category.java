@@ -10,10 +10,13 @@ public class Category {
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int category_id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "payment")
     private double payment;
+
     @Column(name = "studyTime")
     private String studyTime;
 

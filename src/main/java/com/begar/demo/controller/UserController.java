@@ -1,6 +1,6 @@
 package com.begar.demo.controller;
 
-import com.begar.demo.dto.UserInfoDTO;
+import com.begar.demo.dto.request.UserInfoDTO;
 import com.begar.demo.entity.User;
 import com.begar.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping
+    @GetMapping
     public UserInfoDTO getUser(Authentication authentication) {
         User user = getUserByName(authentication.getName());
         UserInfoDTO userInfoDTO = new UserInfoDTO();
@@ -32,7 +32,6 @@ public class UserController {
 
     @PostMapping
     public void addNewUser(@RequestBody UserInfoDTO user) {
-        System.out.println(user.toString());
         userService.addNewUser(user);
     }
 }

@@ -10,8 +10,10 @@ public class Schedule {
     @Column(name = "schedule_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int schedule_id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "description")
     private String description;
 

@@ -1,7 +1,5 @@
 package com.begar.demo.controller;
 
-import com.begar.demo.dto.StudentDocumentsDTO;
-import com.begar.demo.dto.StudentPerCategoryDTO;
 import com.begar.demo.entity.Student;
 import com.begar.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,35 +37,25 @@ public class StudentController {
         studentService.addStudent(student, id);
     }
 
-    @PutMapping("/group-id={id}")
-    public void updateStudent(@RequestBody Student student, @PathVariable int id) {
-        studentService.updateStudent(student, id);
+    @PutMapping
+    public void updateStudent(@RequestBody Student student) {
+        studentService.updateStudent(student);
     }
 
-    @PatchMapping("/student-id={id1}+group-id={id2}")
-    public void patchUpdate(@PathVariable int id1, @PathVariable int id2, @RequestBody Map<Object, Object> fields) {
-        Student student = studentService.getStudent(id1);
+    @PatchMapping("/{id}")
+    public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
+        Student student = studentService.getStudent(id);
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Student.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, student, v);
         });
-        studentService.updateStudent(student, id2);
+        studentService.updateStudent(student);
     }
 
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable int id) {
         studentService.deleteStudent(id);
-    }
-
-    @RequestMapping("/per-category/{cat}")
-    public List<StudentPerCategoryDTO> getStudentsPerCategory(@PathVariable String cat) {
-        return studentService.getStudentsPerCategory(cat);
-    }
-
-    @RequestMapping("/student-documents/{id}")
-    public StudentDocumentsDTO getStudentDocuments(@PathVariable int id) {
-        return studentService.getStudentDocuments(id);
     }
 
     @RequestMapping("/per-group/{id}")

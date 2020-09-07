@@ -10,8 +10,10 @@ public class UtilityPayment {
     @Column(name = "utility_payment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int utility_payment_id;
+
     @Column(name = "size")
     private double size;
+
     @Column(name = "date")
     private String date;
 

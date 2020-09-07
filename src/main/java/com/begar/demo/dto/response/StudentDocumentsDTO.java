@@ -1,4 +1,4 @@
-package com.begar.demo.dto;
+package com.begar.demo.dto.response;
 
 public class StudentDocumentsDTO {
 
@@ -7,6 +7,17 @@ public class StudentDocumentsDTO {
     private String photo;
     private String mainDocumentsCopies;
     private String medicalCertificate;
+
+    public StudentDocumentsDTO(String firstName, String lastName, String photo, String mainDocumentsCopies, String medicalCertificate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.photo = photo;
+        this.mainDocumentsCopies = mainDocumentsCopies;
+        this.medicalCertificate = medicalCertificate;
+    }
+
+    public StudentDocumentsDTO() {
+    }
 
     public String getFirstName() {
         return firstName;
@@ -46,5 +57,16 @@ public class StudentDocumentsDTO {
 
     public void setMedicalCertificate(String medicalCertificate) {
         this.medicalCertificate = medicalCertificate;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentDocumentsDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", photo='" + photo + '\'' +
+                ", mainDocumentsCopies='" + mainDocumentsCopies + '\'' +
+                ", medicalCertificate='" + medicalCertificate + '\'' +
+                '}';
     }
 }

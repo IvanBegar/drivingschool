@@ -1,8 +1,6 @@
 package com.begar.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,22 +12,29 @@ public class Group {
     @Column(name = "group_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int group_id;
+
     @OneToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
     @OneToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     @Column(name = "groupName")
     private String groupName;
+
     @Column(name = "startDate")
     private String startDate;
+
     @Column(name = "endDate")
     private String endDate;
-    @JsonManagedReference
+
+    @JsonIgnoreProperties("groups")
     @ManyToMany(mappedBy = "groups")
     private List<Teacher> teachers;
-    @JsonBackReference
+
+    @JsonIgnoreProperties("groups")
     @ManyToMany(cascade = {
             CascadeType.ALL
     }, fetch = FetchType.EAGER)

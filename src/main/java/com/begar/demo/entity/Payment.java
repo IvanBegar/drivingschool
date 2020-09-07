@@ -10,13 +10,17 @@ public class Payment {
     @Column(name = "payment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int payment_id;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
+
     @Column(name = "date")
     private String date;
+
     @Column(name = "size")
     private double size;
+
     @Column(name = "comment")
     private String comment;
 

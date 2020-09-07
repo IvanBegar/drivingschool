@@ -14,26 +14,27 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<Category> getCategories() {
-        return categoryRepository.getCategories();
+        return categoryRepository.findAll();
     }
 
     public Category getCategory(int id) {
-        return categoryRepository.getCategory(id);
+        return categoryRepository.findById(id).orElseThrow(() -> new DataException("Category with id: " + id +" don't exist!"));
     }
 
     public void addCategory(Category category) {
-        categoryRepository.addCategory(category);
+        categoryRepository.save(category);
     }
 
     public void updateCategory(Category category) {
-        if (categoryRepository.getCategory(category.getCategory_id()).getCategory_id() == 0) {
-            throw new DataException("Category don`t exist!");
-        } else {
-            categoryRepository.updateCategory(category);
-        }
+        Category existingCategory = categoryRepository.findById(category.getCategory_id()).orElseThrow(
+                () -> new DataException("Category with id: " + category.getCategory_id() +" don't exist!"));
+        existingCategory.setName(category.getName());
+        existingCategory.setStudyTime(category.getStudyTime());
+        existingCategory.setPayment(category.getPayment());
+        categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(int id) {
-        categoryRepository.deleteCategory(id);
+        categoryRepository.deleteById(id);
     }
 }

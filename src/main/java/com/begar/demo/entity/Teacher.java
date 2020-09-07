@@ -1,7 +1,6 @@
 package com.begar.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,21 +12,29 @@ public class Teacher {
     @Column(name = "teacher_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int teacher_id;
+
     @Column(name = "firstName")
     private String firstName;
+
     @Column(name = "middleName")
     private String middleName;
+
     @Column(name = "lastName")
     private String lastName;
+
     @Column(name = "dateOfBirth")
     private String dateOfBirth;
+
     @Column(name = "address")
     private String address;
+
     @Column(name = "phone")
     private String phone;
+
     @Column(name = "salary")
     private double salary;
-    @JsonBackReference
+
+    @JsonIgnoreProperties("teachers")
     @ManyToMany(cascade = {
             CascadeType.ALL
     }, fetch = FetchType.EAGER)

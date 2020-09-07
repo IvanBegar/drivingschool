@@ -14,26 +14,26 @@ public class UtilityPaymentService {
     private UtilityPaymentRepository utilityPaymentRepository;
 
     public List<UtilityPayment> getUtilityPayments() {
-        return utilityPaymentRepository.getUtilityPayments();
+        return utilityPaymentRepository.findAll();
     }
 
     public UtilityPayment getUtilityPayment(int id) {
-        return utilityPaymentRepository.getUtilityPayment(id);
+        return utilityPaymentRepository.findById(id).orElseThrow(() -> new DataException("Utility Payment with id: " + id +" don't exist!"));
     }
 
     public void addUtilityPayment(UtilityPayment utilityPayment) {
-        utilityPaymentRepository.addUtilityPayment(utilityPayment);
+        utilityPaymentRepository.save(utilityPayment);
     }
 
     public void updateUtilityPayment(UtilityPayment utilityPayment) {
-        if (utilityPaymentRepository.getUtilityPayment(utilityPayment.getUtility_payment_id()).getUtility_payment_id() == 0) {
-            throw new DataException("Utility payment don`t exist!");
-        } else {
-            utilityPaymentRepository.updateUtilityPayment(utilityPayment);
-        }
+        UtilityPayment existingUtilityPayment = utilityPaymentRepository.findById(utilityPayment.getUtility_payment_id())
+                .orElseThrow(() -> new DataException("Utility Payment with id: " + utilityPayment.getUtility_payment_id() +" don't exist!"));
+        existingUtilityPayment.setDate(utilityPayment.getDate());
+        existingUtilityPayment.setSize(utilityPayment.getSize());
+        utilityPaymentRepository.save(existingUtilityPayment);
     }
 
     public void deleteUtilityPayment(int id) {
-        utilityPaymentRepository.deleteUtilityPayment(id);
+        utilityPaymentRepository.deleteById(id);
     }
 }

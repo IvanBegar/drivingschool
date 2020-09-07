@@ -1,6 +1,5 @@
 package com.begar.demo.service;
 
-import com.begar.demo.dto.SchedulesPerGroupsDTO;
 import com.begar.demo.entity.Schedule;
 import com.begar.demo.exception.DataException;
 import com.begar.demo.repository.ScheduleRepository;
@@ -15,30 +14,26 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 
     public List<Schedule> getSchedules() {
-        return scheduleRepository.getSchedules();
+        return scheduleRepository.findAll();
     }
 
     public Schedule getSchedule(int id) {
-        return scheduleRepository.getSchedule(id);
+        return scheduleRepository.findById(id).orElseThrow(() -> new DataException("Schedule with id: " + id +" don't exist!"));
     }
 
     public void addSchedule(Schedule schedule) {
-        scheduleRepository.addSchedule(schedule);
+        scheduleRepository.save(schedule);
     }
 
     public void updateSchedule(Schedule schedule) {
-        if (scheduleRepository.getSchedule(schedule.getSchedule_id()).getSchedule_id() == 0) {
-            throw new DataException("Schedule don`t exist!");
-        } else {
-            scheduleRepository.updateSchedule(schedule);
-        }
+        Schedule existingSchedule = scheduleRepository.findById(schedule.getSchedule_id()).orElseThrow(
+                () -> new DataException("Schedule with id: " + schedule.getSchedule_id() +" don't exist!"));
+        existingSchedule.setName(schedule.getName());
+        existingSchedule.setDescription(schedule.getDescription());
+        scheduleRepository.save(existingSchedule);
     }
 
     public void deleteSchedule(int id) {
-        scheduleRepository.deleteSchedule(id);
-    }
-
-    public List<SchedulesPerGroupsDTO> getSchedulesPerGroups() {
-        return scheduleRepository.getSchedulesPerGroups();
+        scheduleRepository.deleteById(id);
     }
 }

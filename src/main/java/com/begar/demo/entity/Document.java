@@ -10,13 +10,17 @@ public class Document {
     @Column(name = "document_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int document_id;
+
     @OneToOne
     @JoinColumn(name = "student_id")
     private Student student;
+
     @Column(name = "photo")
     private String photo;
+
     @Column(name = "mainDocumentsCopies")
     private String mainDocumentsCopies;
+
     @Column(name = "medicalCertificate")
     private String medicalCertificate;
 
