@@ -42,7 +42,7 @@ public class GroupController {
     @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Group group = groupService.getGroup(id);
-        fields.forEach((k,v) -> {
+        fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Group.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, group, v);

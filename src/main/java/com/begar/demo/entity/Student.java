@@ -1,5 +1,7 @@
 package com.begar.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int student_id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "group_id")
     private Group group;
@@ -32,6 +35,23 @@ public class Student {
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "email")
+    private String email;
+
+    public Student(int student_id, Group group, String firstName, String middleName, String lastName, String dateOfBirth, String address, String phone) {
+        this.student_id = student_id;
+        this.group = group;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    public Student() {
+    }
 
     public int getStudent_id() {
         return student_id;
@@ -97,6 +117,14 @@ public class Student {
         this.phone = phone;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -108,6 +136,7 @@ public class Student {
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

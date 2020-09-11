@@ -17,6 +17,15 @@ public class UtilityPayment {
     @Column(name = "date")
     private String date;
 
+    public UtilityPayment(int utility_payment_id, double size, String date) {
+        this.utility_payment_id = utility_payment_id;
+        this.size = size;
+        this.date = date;
+    }
+
+    public UtilityPayment() {
+    }
+
     public int getUtility_payment_id() {
         return utility_payment_id;
     }

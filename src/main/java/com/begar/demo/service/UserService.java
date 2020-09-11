@@ -1,9 +1,9 @@
 package com.begar.demo.service;
 
 import com.begar.demo.dto.request.UserInfoDTO;
-import com.begar.demo.entity.Role;
 import com.begar.demo.entity.User;
-import com.begar.demo.exception.DataException;
+import com.begar.demo.entity.enums.ROLE;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,22 +19,16 @@ public class UserService {
 
     public void addNewUser(UserInfoDTO user) {
         User newUser = new User();
-        if (user.getUsername().equals(getUserByName(user.getUsername()).getUsername())) {
-            throw new DataException("User with this username already exist!");
+        if (getUserByName(user.getUsername()) != null) {
+            throw new NoDataException("User with this username already exist!");
         }
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setPhone(user.getPhone());
+        newUser.setEmail(user.getEmail());
         if (user.getRole().equals("Admin")) {
-            Role role = new Role();
-            role.setRole_id(1);
-            role.setRole("ROLE_ADMIN");
-            newUser.setRole(role);
+            newUser.setRole(ROLE.ROLE_ADMIN);
         } else {
-            Role role = new Role();
-            role.setRole_id(2);
-            role.setRole("ROLE_USER");
-            newUser.setRole(role);
+            newUser.setRole(ROLE.ROLE_USER);
         }
         userRepository.save(newUser);
     }

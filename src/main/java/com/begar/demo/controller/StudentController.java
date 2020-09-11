@@ -5,6 +5,7 @@ import com.begar.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,9 @@ public class StudentController {
         return studentService.getStudent(id);
     }
 
-    @GetMapping("/phone={phone}")
-    public Student getStudentByPhoneNumber(@PathVariable String phone) {
-        return studentService.getStudentByPhoneNumber(phone);
+    @GetMapping("/email={email}")
+    public Student getStudentByEmail(@PathVariable String email) {
+        return studentService.getStudentByEmail(email);
     }
 
     @PostMapping("/group-id={id}")

@@ -2,23 +2,23 @@ package com.begar.demo.dto.request;
 
 public class AuthenticationRequestDTO {
 
-    private String username;
+    private String email;
     private String password;
 
     public AuthenticationRequestDTO() {
     }
 
     public AuthenticationRequestDTO(String username, String password) {
-        this.username = username;
+        this.email = username;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -32,8 +32,8 @@ public class AuthenticationRequestDTO {
     @Override
     public String toString() {
         return "AuthenticationRequestDTO{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                "email='" + email + '\'' +
+                ", password='" + "[PROTECTED]" + '\'' +
                 '}';
     }
 }

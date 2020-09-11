@@ -24,6 +24,17 @@ public class Document {
     @Column(name = "medicalCertificate")
     private String medicalCertificate;
 
+    public Document(int document_id, Student student, String photo, String mainDocumentsCopies, String medicalCertificate) {
+        this.document_id = document_id;
+        this.student = student;
+        this.photo = photo;
+        this.mainDocumentsCopies = mainDocumentsCopies;
+        this.medicalCertificate = medicalCertificate;
+    }
+
+    public Document() {
+    }
+
     public int getDocument_id() {
         return document_id;
     }

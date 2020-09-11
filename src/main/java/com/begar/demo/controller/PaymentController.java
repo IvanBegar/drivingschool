@@ -7,6 +7,7 @@ import com.begar.demo.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class PaymentController {
     @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         Payment payment = paymentService.getPayment(id);
-        fields.forEach((k,v) -> {
+        fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Payment.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, payment, v);
@@ -62,6 +63,6 @@ public class PaymentController {
 
     @RequestMapping("/for-period/{str}_{end}")
     public PaymentForPeriodDTO getPaymentForPeriod(@PathVariable String str, @PathVariable String end) {
-        return paymentService.getPaymentForPeriod(str,end);
+        return paymentService.getPaymentForPeriod(str, end);
     }
 }

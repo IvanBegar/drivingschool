@@ -5,6 +5,7 @@ import com.begar.demo.service.VehiclePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class VehiclePaymentController {
     @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         VehiclePayment vehiclePayment = vehiclePaymentService.getVehiclePayment(id);
-        fields.forEach((k,v) -> {
+        fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(VehiclePayment.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, vehiclePayment, v);

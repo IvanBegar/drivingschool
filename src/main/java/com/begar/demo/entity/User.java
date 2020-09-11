@@ -1,7 +1,10 @@
 package com.begar.demo.entity;
 
+import com.begar.demo.entity.enums.ROLE;
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
 @Component
@@ -20,12 +23,15 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Enumerated(value = EnumType.ORDINAL)
+    @Column(nullable = false)
+    private ROLE role;
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "enabled")
     @ColumnDefault("1")
@@ -55,11 +61,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
+    public ROLE getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(ROLE role) {
         this.role = role;
     }
 
@@ -69,6 +75,14 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getEnabled() {
@@ -87,6 +101,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
                 ", enabled='" + enabled + '\'' +
                 '}';
     }

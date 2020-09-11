@@ -2,11 +2,12 @@ package com.begar.demo.service;
 
 import com.begar.demo.entity.Vehicle;
 import com.begar.demo.entity.VehiclePayment;
-import com.begar.demo.exception.DataException;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.VehiclePaymentRepository;
 import com.begar.demo.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -23,18 +24,18 @@ public class VehiclePaymentService {
     }
 
     public VehiclePayment getVehiclePayment(int id) {
-        return vehiclePaymentRepository.findById(id).orElseThrow(() -> new DataException("Student with id: " + id + " don't exist!"));
+        return vehiclePaymentRepository.findById(id).orElseThrow(() -> new NoDataException("Student with id: " + id + " don't exist!"));
     }
 
     public void addVehiclePayment(VehiclePayment vehiclePayment, int id) {
-        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new DataException("Vehicle with id: " + id +" don't exist!"));
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new NoDataException("Vehicle with id: " + id + " don't exist!"));
         vehiclePayment.setVehicle(vehicle);
         vehiclePaymentRepository.save(vehiclePayment);
     }
 
     public void updateVehiclePayment(VehiclePayment vehiclePayment) {
         VehiclePayment existingVehiclePayment = vehiclePaymentRepository.findById(vehiclePayment.getVehicle_payment_id()).orElseThrow(
-                () -> new DataException("Vehicle Payment with id: " + vehiclePayment.getVehicle_payment_id() +" don't exist!"));
+                () -> new NoDataException("Vehicle Payment with id: " + vehiclePayment.getVehicle_payment_id() + " don't exist!"));
         existingVehiclePayment.setVehicle(vehiclePayment.getVehicle());
         existingVehiclePayment.setDate(vehiclePayment.getDate());
         existingVehiclePayment.setSize(vehiclePayment.getSize());

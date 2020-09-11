@@ -1,8 +1,7 @@
 package com.begar.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -27,6 +26,17 @@ public class Vehicle {
     @JsonIgnoreProperties("vehicles")
     @ManyToMany(mappedBy = "vehicles")
     private List<Group> groups;
+
+    public Vehicle(int vehicle_id, String autoBrand, String govNumber, String year, List<Group> groups) {
+        this.vehicle_id = vehicle_id;
+        this.autoBrand = autoBrand;
+        this.govNumber = govNumber;
+        this.year = year;
+        this.groups = groups;
+    }
+
+    public Vehicle() {
+    }
 
     public int getVehicle_id() {
         return vehicle_id;

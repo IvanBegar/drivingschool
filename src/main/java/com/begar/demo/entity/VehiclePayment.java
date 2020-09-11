@@ -24,6 +24,17 @@ public class VehiclePayment {
     @Column(name = "comment")
     private String comment;
 
+    public VehiclePayment(int vehicle_payment_id, Vehicle vehicle, double size, String date, String comment) {
+        this.vehicle_payment_id = vehicle_payment_id;
+        this.vehicle = vehicle;
+        this.size = size;
+        this.date = date;
+        this.comment = comment;
+    }
+
+    public VehiclePayment() {
+    }
+
     public double getSize() {
         return size;
     }

@@ -20,6 +20,16 @@ public class Category {
     @Column(name = "studyTime")
     private String studyTime;
 
+    public Category() {
+    }
+
+    public Category(int category_id, String name, double payment, String studyTime) {
+        this.category_id = category_id;
+        this.name = name;
+        this.payment = payment;
+        this.studyTime = studyTime;
+    }
+
     public int getCategory_id() {
         return category_id;
     }

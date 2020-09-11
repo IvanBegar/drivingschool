@@ -5,6 +5,7 @@ import com.begar.demo.service.StudentResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class StudentResultController {
     @PatchMapping("/{id}")
     public void patchUpdate(@PathVariable int id, @RequestBody Map<Object, Object> fields) {
         StudentResult studentResult = studentResultService.getStudentResult(id);
-        fields.forEach((k,v) -> {
+        fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(StudentResult.class, (String) k);
             field.setAccessible(true);
             ReflectionUtils.setField(field, studentResult, v);

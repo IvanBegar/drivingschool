@@ -4,12 +4,13 @@ import com.begar.demo.dto.response.SchedulesPerGroupsDTO;
 import com.begar.demo.entity.Category;
 import com.begar.demo.entity.Group;
 import com.begar.demo.entity.Schedule;
-import com.begar.demo.exception.DataException;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.CategoryRepository;
 import com.begar.demo.repository.GroupRepository;
 import com.begar.demo.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class GroupService {
     }
 
     public Group getGroup(int id) {
-        return groupRepository.findById(id).orElseThrow(() -> new DataException("Group with id: " + id +" don't exist!"));
+        return groupRepository.findById(id).orElseThrow(() -> new NoDataException("Group with id: " + id + " don't exist!"));
     }
 
     public void addGroup(Group group, String category_name, String schedule_name) {
@@ -47,7 +48,7 @@ public class GroupService {
 
     public void updateGroup(Group group) {
         Group existingGroup = groupRepository.findById(group.getGroup_id()).orElseThrow(
-                () -> new DataException("Group with id: " + group.getGroup_id() +" don't exist!"));
+                () -> new NoDataException("Group with id: " + group.getGroup_id() + " don't exist!"));
         existingGroup.setCategory(group.getCategory());
         existingGroup.setSchedule(group.getSchedule());
         existingGroup.setGroupName(group.getGroupName());

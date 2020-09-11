@@ -24,6 +24,17 @@ public class StudentResult {
     @Column(name = "resultInSchool")
     private String resultInSchool;
 
+    public StudentResult(int result_id, Student student, String dateOfExam, String resultInCenter, String resultInSchool) {
+        this.result_id = result_id;
+        this.student = student;
+        this.dateOfExam = dateOfExam;
+        this.resultInCenter = resultInCenter;
+        this.resultInSchool = resultInSchool;
+    }
+
+    public StudentResult() {
+    }
+
     public int getResult_id() {
         return result_id;
     }

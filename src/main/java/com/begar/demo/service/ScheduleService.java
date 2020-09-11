@@ -1,10 +1,11 @@
 package com.begar.demo.service;
 
 import com.begar.demo.entity.Schedule;
-import com.begar.demo.exception.DataException;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class ScheduleService {
     }
 
     public Schedule getSchedule(int id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new DataException("Schedule with id: " + id +" don't exist!"));
+        return scheduleRepository.findById(id).orElseThrow(() -> new NoDataException("Schedule with id: " + id + " don't exist!"));
     }
 
     public void addSchedule(Schedule schedule) {
@@ -27,7 +28,7 @@ public class ScheduleService {
 
     public void updateSchedule(Schedule schedule) {
         Schedule existingSchedule = scheduleRepository.findById(schedule.getSchedule_id()).orElseThrow(
-                () -> new DataException("Schedule with id: " + schedule.getSchedule_id() +" don't exist!"));
+                () -> new NoDataException("Schedule with id: " + schedule.getSchedule_id() + " don't exist!"));
         existingSchedule.setName(schedule.getName());
         existingSchedule.setDescription(schedule.getDescription());
         scheduleRepository.save(existingSchedule);

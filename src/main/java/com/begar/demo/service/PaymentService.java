@@ -4,10 +4,11 @@ import com.begar.demo.dto.response.IncomeForPeriodDTO;
 import com.begar.demo.dto.response.PaymentForPeriodDTO;
 import com.begar.demo.entity.Payment;
 import com.begar.demo.entity.Student;
-import com.begar.demo.exception.DataException;
+import com.begar.demo.exception.NoDataException;
 import com.begar.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -37,18 +38,18 @@ public class PaymentService {
     }
 
     public Payment getPayment(int id) {
-        return paymentRepository.findById(id).orElseThrow(() -> new DataException("Payment with id: " + id +" don't exist!"));
+        return paymentRepository.findById(id).orElseThrow(() -> new NoDataException("Payment with id: " + id + " don't exist!"));
     }
 
     public void addPayment(Payment payment, int id) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new DataException("Student with id: " + id +" don't exist!"));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new NoDataException("Student with id: " + id + " don't exist!"));
         payment.setStudent(student);
         paymentRepository.save(payment);
     }
 
     public void updatePayment(Payment payment) {
         Payment existingPayment = paymentRepository.findById(payment.getPayment_id()).orElseThrow(
-                () -> new DataException("Payment with id: " + payment.getPayment_id() +" don't exist!"));
+                () -> new NoDataException("Payment with id: " + payment.getPayment_id() + " don't exist!"));
         existingPayment.setStudent(payment.getStudent());
         existingPayment.setComment(payment.getComment());
         existingPayment.setDate(payment.getDate());

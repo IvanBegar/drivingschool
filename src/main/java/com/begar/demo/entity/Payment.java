@@ -24,6 +24,17 @@ public class Payment {
     @Column(name = "comment")
     private String comment;
 
+    public Payment(int payment_id, Student student, String date, double size, String comment) {
+        this.payment_id = payment_id;
+        this.student = student;
+        this.date = date;
+        this.size = size;
+        this.comment = comment;
+    }
+
+    public Payment() {
+    }
+
     public int getPayment_id() {
         return payment_id;
     }

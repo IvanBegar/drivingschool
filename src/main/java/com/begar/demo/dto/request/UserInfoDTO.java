@@ -4,8 +4,18 @@ public class UserInfoDTO {
 
     private String username;
     private String role;
-    private String phone;
+    private String email;
     private String password;
+
+    public UserInfoDTO(String username, String role, String phone, String password) {
+        this.username = username;
+        this.role = role;
+        this.email = phone;
+        this.password = password;
+    }
+
+    public UserInfoDTO() {
+    }
 
     public String getPassword() {
         return password;
@@ -31,11 +41,11 @@ public class UserInfoDTO {
         this.role = role;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String phone) {
+        this.email = phone;
     }
 }

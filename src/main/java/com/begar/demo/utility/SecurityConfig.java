@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/categories/all", "/schedules/all", "/groups/schedules", "/authenticate", "/home", "/").permitAll()
-                .antMatchers("/students", "/students/id={id}", "/students/phone={phone}", "/user").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/students/id={id}", "/students/phone={phone}", "/user").hasAnyRole("USER", "ADMIN")
                 .anyRequest().hasRole("ADMIN")
                 .and().httpBasic()
                 .and().cors()

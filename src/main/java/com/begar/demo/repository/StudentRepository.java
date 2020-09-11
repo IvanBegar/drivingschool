@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    Student findByPhone(String phone);
+    Student findByEmail(String email);
 
     @Query("select s from Student s inner join s.group g where g.group_id = :id")
     List<Student> getStudentsPerGroup(@Param("id") int id);

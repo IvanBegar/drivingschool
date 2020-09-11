@@ -20,8 +20,8 @@ public class UserController {
         User user = getUserByName(authentication.getName());
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setUsername(user.getUsername());
-        userInfoDTO.setPhone(user.getPhone());
-        userInfoDTO.setRole(user.getRole().getRole());
+        userInfoDTO.setEmail(user.getEmail());
+        userInfoDTO.setRole(user.getRole().name());
         return userInfoDTO;
     }
 

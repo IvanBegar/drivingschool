@@ -1,6 +1,7 @@
 package com.begar.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -43,6 +44,21 @@ public class Teacher {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     private List<Group> groups;
+
+    public Teacher(int teacher_id, String firstName, String middleName, String lastName, String dateOfBirth, String address, String phone, double salary, List<Group> groups) {
+        this.teacher_id = teacher_id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.phone = phone;
+        this.salary = salary;
+        this.groups = groups;
+    }
+
+    public Teacher() {
+    }
 
     public List<Group> getGroups() {
         return groups;

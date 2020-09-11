@@ -17,6 +17,15 @@ public class Schedule {
     @Column(name = "description")
     private String description;
 
+    public Schedule(int schedule_id, String name, String description) {
+        this.schedule_id = schedule_id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Schedule() {
+    }
+
     public int getSchedule_id() {
         return schedule_id;
     }
