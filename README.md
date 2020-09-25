@@ -4,11 +4,12 @@ In my website you can login:  as student then you can manage your profile inform
 As owner of the school or administrator you can manage all information about school, like schedules, categories, groups, vehicles, payments etc.
 
 Branches:
-1.master - JDBC + Basic auth
 
-2.hibernate-branch - pure hibernate + Basic auth
+1. master - JDBC + Basic auth
 
-3.hibernate+spring-jpa - hibernate with Spring JPA + JWT
+2. hibernate-branch - pure hibernate + Basic auth
+
+3. hibernate+spring-jpa - hibernate with Spring JPA + JWT
 
 Front-end part of the project - https://github.com/IvanBegar/drivingschool-angular
 
