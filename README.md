@@ -5,7 +5,9 @@ As owner of the school or administrator you can manage all information about sch
 
 Branches:
 1.master - JDBC + Basic auth
+
 2.hibernate-branch - pure hibernate + Basic auth
+
 3.hibernate+spring-jpa - hibernate with Spring JPA + JWT
 
 Front-end part of the project - https://github.com/IvanBegar/drivingschool-angular
